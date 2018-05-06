@@ -2,7 +2,7 @@
 
 Install Git if you don't already have it.
 
-Note: when you see `something like <_this_>`, which indicates code to type, copy it exactly EXCEPT for whatever is inside the `<>`. Replace the `<>` with something that makes sense, and don't include the actual brackets themselves.
+Note: when you see `something like <this>`, which indicates code to type, copy it exactly EXCEPT for whatever is inside the `<>`. Replace the `<>` with something that makes sense, and don't include the actual brackets themselves.
 
 ## Make and submit changes
 
@@ -17,19 +17,19 @@ If you're just starting, refer to the "Create and link a local repository" secti
 
 2. Create a new branch of the project. This allows you to isolate your changes from everyone else so you can work on a specific part (e.g. a certain class). When you finish, your branch is merged back into the master branch.
     
-    `git branch <_branch name_>`
+    `git branch <branch name>`
     
-    Switch to your new branch with `git checkout <_branch name_>`
+    Switch to your new branch with `git checkout <branch name>`
 
 3. Write some code, blah blah blah. When you feel like you've reached a good checkpoint where things are working pretty well (not necessarily finished, but nothing will break), then:
     
     Run `git status` and look for any "Untracked files" in the output. If some files in the project are untracked, that means that Git will not include them when it updates. So, if there are any untracked files, run `git add -A .` to include all of them.
     
-    Run `git commit -m '<_message_>'`. A commit is a sort of snapshot of the repository which we can compare to commits made at other points in time to see what's changed. The message should be short and simple but still descriptive of what you've changed, like "Added newclass.js" or "Added ability to do X" or "Made bots more difficult".
+    Run `git commit -m '<message>'`. A commit is a sort of snapshot of the repository which we can compare to commits made at other points in time to see what's changed. The message should be short and simple but still descriptive of what you've changed, like "Added newclass.js" or "Added ability to do X" or "Made bots more difficult".
 
 4. Submit your changes to your branch in the remote repository.
     
-    `git push origin <_branch name_>`
+    `git push origin <branch name>`
     
     You should repeat steps 3 and 4 throughout the process of working on your part of the code. Save your code in the editor the most often, commit your changes locally when you finish some subsection of your assignment, and push to the remote at the end of the day.
 
@@ -41,7 +41,7 @@ If you're just starting, refer to the "Create and link a local repository" secti
     
     ```
     git checkout master
-    git branch -d <_branch name_>
+    git branch -d <branch name>
     ```
     
     If there are still things you have to change, return to step 3 and repeat. You will not have to create a new merge request - just notify William when you're ready and push your changes again.
@@ -61,7 +61,7 @@ You will need a Git repository on your computer to transfer changes/updates to a
 1. Create a new folder to contain all the project files. Make sure you can access it easily.
 
 2. Navigate to this folder in the terminal/command prompt.
-    MacOS and Windows: `cd <_filepath_>`
+    MacOS and Windows: `cd <filepath>`
 
 3. Enter the following commands:
     ```
