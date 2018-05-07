@@ -1,3 +1,7 @@
+# Our project
+
+Our goal is to build a parodic version of Call of Duty. We will use the Unity game engine and editor, with the C# language. Please refer to the [Unity API](https://docs.unity3d.com/ScriptReference/).
+
 # Git 101
 
 Install Git if you don't already have it.
@@ -6,7 +10,7 @@ Note: when you see `something like <this>`, which indicates code to type, copy i
 
 ## Make and submit changes
 
-If you're just starting, refer to the "Create and link a local repository" section below to set up a repository. Then, whenever you work on some part of the project, navigate to your project folder in the terminal/command prompt and do the following:
+If you're just starting, refer to the "Create and link a local repository" section at the bottom to set up a repository. Then, whenever you work on some part of the project, navigate to your project folder in the terminal/command prompt and do the following:
 
 1. Make sure you're up to date in your local repository.
     
