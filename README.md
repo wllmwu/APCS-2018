@@ -12,7 +12,7 @@ Note: when you see `something like <this>`, which indicates code to type, copy i
 
 If you're just starting, refer to the "Create and link a local repository" section at the bottom to set up a repository. Then, whenever you work on some part of the project, navigate to your project folder in the terminal/command prompt and do the following:
 
-1. Make sure you're up to date in your local repository.
+1. Make sure you're up to date in your local repository. IT IS ABSOLUTELY ESSENTIAL THAT YOU DO THIS TO AVOID LOSING ALL YOUR WORK. GIT MAY REFUSE TO ALLOW YOU TO SUBMIT YOUR CHANGES UNLESS YOU ARE UP TO DATE.
     
     ```
     git checkout master
