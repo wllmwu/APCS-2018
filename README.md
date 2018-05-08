@@ -2,6 +2,8 @@
 
 Our goal is to build a parodic version of Call of Duty. We will use the Unity game engine and editor, with the C# language. Please refer to the [Unity API](https://docs.unity3d.com/ScriptReference/).
 
+UPDATES ABOUT ASSIGNMENTS AND REQUIREMENTS PENDING
+
 # Git 101
 
 Install Git if you don't already have it.
