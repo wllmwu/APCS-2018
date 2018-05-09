@@ -19,6 +19,10 @@ When you're first starting out, set up a local Git repository (see "Git 101" bel
 
 ![External Script Editor preferences](external script editor.png)
 
+To open a C# script file in the external IDE, select the file in the project pane at the bottom, then click Open in the inspector on the right side.
+
+![Open a C# script file](open c# script.png)
+
 # Git 101
 
 Note: when you see `something like <this>`, which indicates code to type, copy it exactly EXCEPT for whatever is inside the `<>`. Replace the `<>` with something that makes sense, and don't include the actual brackets themselves.
