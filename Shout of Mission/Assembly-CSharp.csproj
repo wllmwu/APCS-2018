@@ -52,11 +52,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\TestScript.cs" />
- <Reference Include="Unity.PackageManagerUI.Editor">
- <HintPath>/Users/billwu/Desktop/AP Comp Sci/2018 Final Project/Shout of Mission/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>/Users/billwu/Desktop/AP Comp Sci/2018 Final Project/Shout of Mission/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.PackageManagerUI.Editor">
+ <HintPath>/Users/billwu/Desktop/AP Comp Sci/2018 Final Project/Shout of Mission/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
