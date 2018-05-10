@@ -21,7 +21,7 @@ When you're first starting out, set up a local Git repository (see "Git 101" bel
 
 To open a C# script file in the external IDE, select the file in the project pane at the bottom, then click Open in the inspector on the right side.
 
-![Open a C# script file](open c# script.png)
+![Open a C# script file](open script.png)
 
 # Git 101
 
