@@ -5,11 +5,16 @@ Our goal is to build a parodic version of Call of Duty. We will use the Unity ga
 ## Members
 
 - [William Wu](https://gitlab.com/Quaderatics) (period 6)
+    - In charge of the overall project
+    - Randomized terrain/level generation
+    - Player actions
+    - Game mechanics
 - [Simon Yu](https://gitlab.com/SimCode989) (6)
+    - Different types of weapons and projectiles
 - [Aditya Mehta](https://gitlab.com/93IQ) (6)
+    - Item pickups (ammunition, health, buffs/debuffs)
 - Maxwell Huang (4)
-
-UPDATES ABOUT ASSIGNMENTS AND REQUIREMENTS PENDING
+    - Enemy bots and their AI
 
 # B. Unity 101
 
