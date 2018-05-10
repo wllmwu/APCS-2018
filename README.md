@@ -1,17 +1,22 @@
-# Our project
+# A. Our project
 
 Our goal is to build a parodic version of Call of Duty. We will use the Unity game engine with the C# language. Please refer to the [Unity API](https://docs.unity3d.com/ScriptReference/).
 
 ## Members
 
 - [William Wu](https://gitlab.com/Quaderatics) (period 6)
+    - In charge of the overall project
+    - Randomized terrain/level generation
+    - Player actions
+    - Game mechanics
 - [Simon Yu](https://gitlab.com/SimCode989) (6)
+    - Different types of weapons and projectiles
 - [Aditya Mehta](https://gitlab.com/93IQ) (6)
+    - Item pickups (ammunition, health, buffs/debuffs)
 - Maxwell Huang (4)
+    - Enemy bots and their AI
 
-UPDATES ABOUT ASSIGNMENTS AND REQUIREMENTS PENDING
-
-# Unity 101
+# B. Unity 101
 
 You will need the [Unity development platform](https://unity3d.com/get-unity/download) and any IDE that can handle C#, as well as [Git](https://git-scm.com/downloads) for version control.
 
@@ -21,9 +26,9 @@ When you're first starting out, set up a local Git repository (see "Git 101" bel
 
 To open a C# script file in the external IDE, select the file in the project pane at the bottom, then click Open in the inspector on the right side.
 
-![Open a C# script file](open c# script.png)
+![Open a C# script file](open script.png)
 
-# Git 101
+# C. Git 101
 
 Note: when you see `something like <this>`, which indicates code to type, copy it exactly EXCEPT for whatever is inside the `<>`. Replace the `<>` with something that makes sense, and don't include the actual brackets themselves.
 
