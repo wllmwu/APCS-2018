@@ -13,7 +13,7 @@ Our goal is to build a parodic version of Call of Duty. We will use the Unity ga
     - Different types of weapons and projectiles
 - [Aditya Mehta](https://gitlab.com/93IQ) (6)
     - Item pickups (ammunition, health, buffs/debuffs)
-- Maxwell Huang (4)
+- [Maxwell Huang](https://gitlab.com/maxhuangca) (4)
     - Enemy bots and their AI
 
 # B. Unity 101
@@ -88,10 +88,12 @@ You will need a Git repository on your computer to transfer changes/updates to a
 
 1. Create a new folder to contain all the project files. Make sure you can access it easily.
 
-2. Navigate to this folder in the terminal/command prompt.
+2. [Generate your SSH keys.](https://docs.gitlab.com/ee/ssh/)
+
+3. Navigate to this folder in the terminal/command prompt.
     MacOS and Windows: `cd <filepath>`
 
-3. Enter the following commands:
+4. Enter the following commands:
     ```
     git init
     git remote add origin git@gitlab.com:Quaderatics/APCS-2018.git
