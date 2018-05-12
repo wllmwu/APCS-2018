@@ -6,20 +6,22 @@ public class LevelGenerator : MonoBehaviour {
   private int rows = 10;
   private int cols = 10;
   private int[,] map;
+  private int spawnRow = 0;
+  private int spawnCol = 0;
   private enum MapModule : int {
     Empty = 0,
-    NS,
-    EW,
-    NE,
-    ES,
-    SW,
-    WN,
-    NES,
-    ESW,
-    SWN,
-    WNE,
-    NESW,
-    Border
+    NS, // 1
+    EW, // 2
+    NE, // 3
+    ES, // 4
+    SW, // 5
+    WN, // 6
+    NES, // 7
+    ESW, // 8
+    SWN, // 9
+    WNE, // 10
+    NESW, // 11
+    Border // 12
   };
   private MapModule[] modules = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.EW, MapModule.NE, 
     MapModule.ES, MapModule.SW, MapModule.WN, MapModule.NES, MapModule.ESW, MapModule.SWN, 
@@ -28,13 +30,19 @@ public class LevelGenerator : MonoBehaviour {
   private MapModule[][] eastConnections;
   private MapModule[][] southConnections;
   private MapModule[][] westConnections;
+  private MapModule[] southConnectors;
+  private MapModule[] noSouthConnectors;
+  private MapModule[] westConnectors;
+  private MapModule[] noWestConnectors;
+  private MapModule[] northConnectors;
+  private MapModule[] noNorthConnectors;
+  private MapModule[] eastConnectors;
+  private MapModule[] noEastConnectors;
 
 	// Use this for initialization
 	void Start () {
-		InitializeModules ();
-    InitializeMap ();
-    FixDeadEnds ();
-    DisplayMap ();
+		InitializeModules();
+    SetUpMap();
 	}
 	
 	// Update is called once per frame
@@ -42,9 +50,16 @@ public class LevelGenerator : MonoBehaviour {
 		
 	}
 
+  void SetUpMap() {
+    InitializeMap();
+    PickSpawnRoomLocation();
+    FixDeadEnds();
+    DisplayMap();
+  }
+
   void InitializeModules () {
-    MapModule[] southConnectors = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.ES, MapModule.SW, MapModule.NES, MapModule.ESW, MapModule.SWN, MapModule.NESW };
-    MapModule[] noSouthConnectors = new MapModule[] { MapModule.Empty, MapModule.EW, MapModule.NE, MapModule.WN, MapModule.WNE, MapModule.Border };
+    southConnectors = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.ES, MapModule.SW, MapModule.NES, MapModule.ESW, MapModule.SWN, MapModule.NESW };
+    noSouthConnectors = new MapModule[] { MapModule.Empty, MapModule.EW, MapModule.NE, MapModule.WN, MapModule.WNE, MapModule.Border };
     northConnections = new MapModule[][] {
       noSouthConnectors, // empty
       southConnectors, // NS
@@ -60,8 +75,8 @@ public class LevelGenerator : MonoBehaviour {
       southConnectors // NESW
     };
 
-    MapModule[] westConnectors = new MapModule[] { MapModule.Empty, MapModule.EW, MapModule.SW, MapModule.WN, MapModule.ESW, MapModule.SWN, MapModule.WNE, MapModule.NESW };
-    MapModule[] noWestConnectors = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.NE, MapModule.ES, MapModule.NES, MapModule.Border };
+    westConnectors = new MapModule[] { MapModule.Empty, MapModule.EW, MapModule.SW, MapModule.WN, MapModule.ESW, MapModule.SWN, MapModule.WNE, MapModule.NESW };
+    noWestConnectors = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.NE, MapModule.ES, MapModule.NES, MapModule.Border };
     eastConnections = new MapModule[][] {
       noWestConnectors, // empty
       noWestConnectors, // NS
@@ -77,8 +92,8 @@ public class LevelGenerator : MonoBehaviour {
       westConnectors // NESW
     };
 
-    MapModule[] northConnectors = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.NE, MapModule.WN, MapModule.NES, MapModule.SWN, MapModule.WNE, MapModule.NESW };
-    MapModule[] noNorthConnectors = new MapModule[] { MapModule.Empty, MapModule.EW, MapModule.ES, MapModule.SW, MapModule.ESW, MapModule.Border };
+    northConnectors = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.NE, MapModule.WN, MapModule.NES, MapModule.SWN, MapModule.WNE, MapModule.NESW };
+    noNorthConnectors = new MapModule[] { MapModule.Empty, MapModule.EW, MapModule.ES, MapModule.SW, MapModule.ESW, MapModule.Border };
     southConnections = new MapModule[][] {
       noNorthConnectors, // empty
       northConnectors, // NS
@@ -94,8 +109,8 @@ public class LevelGenerator : MonoBehaviour {
       northConnectors // NESW
     };
 
-    MapModule[] eastConnectors = new MapModule[] { MapModule.Empty, MapModule.EW, MapModule.NE, MapModule.ES, MapModule.NES, MapModule.ESW, MapModule.WNE, MapModule.NESW };
-    MapModule[] noEastConnectors = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.SW, MapModule.WN, MapModule.SWN, MapModule.Border };
+    eastConnectors = new MapModule[] { MapModule.Empty, MapModule.EW, MapModule.NE, MapModule.ES, MapModule.NES, MapModule.ESW, MapModule.WNE, MapModule.NESW };
+    noEastConnectors = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.SW, MapModule.WN, MapModule.SWN, MapModule.Border };
     westConnections = new MapModule[][] {
       noEastConnectors, // empty
       noEastConnectors, // NS
@@ -127,7 +142,7 @@ public class LevelGenerator : MonoBehaviour {
     for (int r = 1; r < rows - 1; r++) {
       for (int c = 1; c < cols - 1; c++) {
         List<MapModule> valid = GetValidMapModules (r, c);
-        map[r, c] = (int)(valid[UnityEngine.Random.Range (0, valid.Count)]);
+        map[r, c] = (int)(valid[Random.Range (0, valid.Count)]);
       }
     }
   }
@@ -161,10 +176,83 @@ public class LevelGenerator : MonoBehaviour {
     return false;
   }
 
+  void PickSpawnRoomLocation() {
+    List<int> rowValues = new List<int>();
+    List<int> colValues = new List<int>();
+    for (int r = 2; r < rows - 2; r++) {
+      for (int c = 2; c < cols - 2; c++) {
+        if (map[r, c] == (int)MapModule.NESW) {
+          rowValues.Add(r);
+          colValues.Add(c);
+        }
+      }
+    }
+
+    if (rowValues.Count > 0) {
+      int x = Random.Range(0, rowValues.Count);
+      spawnRow = rowValues[x];
+      spawnCol = colValues[x];
+    }
+    else {
+      SetUpMap();
+    }
+  }
+
   void FixDeadEnds() {
     for (int r = 1; r < rows - 1; r++) {
       for (int c = 1; c < cols - 1; c++) {
+        int looseEnds = CountLooseEnds(r, c);
+        if (map[r, c] == (int)MapModule.Empty && looseEnds > 0) {
+          TieLooseEnds(r, c, looseEnds);
+        }
+      }
+    }
+  }
+
+  int CountLooseEnds(int r, int c) {
+    int looseEnds = 0;
+    looseEnds += ArrayContains(southConnectors, map[r - 1, c]) ? 1 : 0;
+    looseEnds += ArrayContains(westConnectors, map[r, c + 1]) ? 1 : 0;
+    looseEnds += ArrayContains(northConnectors, map[r + 1, c]) ? 1 : 0;
+    looseEnds += ArrayContains(eastConnectors, map[r, c - 1]) ? 1 : 0;
+    /*if (ArrayContains(southConnectors, map[r - 1, c])) {
+      looseEnds++;
+    }
+    if (ArrayContains(westConnectors, map[r, c + 1])) {
+      looseEnds++;
+    }*/
+    return looseEnds;
+  }
+
+  void TieLooseEnds(int r, int c, int looseEnds) {
+    if (looseEnds == 4) {
+      map[r, c] = (int)MapModule.NESW;
+    }
+    else {
+      bool north = ArrayContains(southConnectors, map[r - 1, c]);
+      bool east = ArrayContains(westConnectors, map[r, c + 1]);
+      bool south = ArrayContains(northConnectors, map[r + 1, c]);
+      bool west = ArrayContains(eastConnectors, map[r, c - 1]);
+      if (looseEnds == 1) {
         //
+      }
+      else {
+        if (north && east) {
+          if (south) map[r, c] = (int)MapModule.NES;
+          else if (west) map[r, c] = (int)MapModule.WNE;
+          else map[r, c] = (int)MapModule.NE;
+        }
+        else if (east && south) {
+          if (west) map[r, c] = (int)MapModule.ESW;
+          else map[r, c] = (int)MapModule.ES;
+        }
+        else if (south && west) {
+          if (north) map[r, c] = (int)MapModule.SWN;
+          else map[r, c] = (int)MapModule.SW;
+        }
+        else if (west && north) {
+          map[r, c] = (int)MapModule.WN;
+        }
       }
     }
   }
