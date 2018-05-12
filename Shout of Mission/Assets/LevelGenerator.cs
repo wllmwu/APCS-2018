@@ -23,10 +23,10 @@ public class LevelGenerator : MonoBehaviour {
   private MapModule[] modules = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.EW, MapModule.NE, 
     MapModule.ES, MapModule.SW, MapModule.WN, MapModule.NES, MapModule.ESW, MapModule.SWN, 
     MapModule.WNE, MapModule.NESW };
-  private MapModule[,] upConnections;
-  private MapModule[,] downConnections;
-  private MapModule[,] leftConnections;
-  private MapModule[,] rightConnections;
+  private MapModule[][] northConnections;
+  private MapModule[][] eastConnections;
+  private MapModule[][] southConnections;
+  private MapModule[][] westConnections;
 
 	// Use this for initialization
 	void Start () {
@@ -42,13 +42,72 @@ public class LevelGenerator : MonoBehaviour {
 
   void InitializeModules () {
     MapModule[] southConnectors = new MapModule[] { MapModule.NS, MapModule.ES, MapModule.SW, MapModule.NES, MapModule.ESW, MapModule.SWN, MapModule.NESW };
-
-    upConnections = new MapModule[,] {
-      { MapModule.Empty, MapModule.EW, MapModule.NE, MapModule.WN, MapModule.WNE },
-      { MapModule.NS, MapModule.ES, MapModule.SW, MapModule.NES, MapModule.ESW, MapModule.SWN, MapModule.NESW },
-      { MapModule.Empty, MapModule.EW, MapModule.NE, MapModule.WN, MapModule.WNE },
-      { MapModule. }
+    MapModule[] noSouthConnectors = new MapModule[] { MapModule.EW, MapModule.NE, MapModule.WN, MapModule.WNE };
+    northConnections = new MapModule[][] {
+      noSouthConnectors, // empty
+      southConnectors, // NS
+      noSouthConnectors, // EW
+      southConnectors, // NE
+      noSouthConnectors, // ES
+      noSouthConnectors, // SW
+      southConnectors, // WN
+      southConnectors, // NES
+      noSouthConnectors, // ESW
+      southConnectors, // SWN
+      southConnectors, // WNE
+      southConnectors // NESW
     };
+
+    MapModule[] westConnectors = new MapModule[] { MapModule.EW, MapModule.SW, MapModule.WN, MapModule.ESW, MapModule.SWN, MapModule.WNE, MapModule.NESW };
+    MapModule[] noWestConnectors = new MapModule[] { MapModule.NS, MapModule.NE, MapModule.ES, MapModule.NES };
+    eastConnections = new MapModule[] {
+      noWestConnectors, // empty
+      noWestConnectors, // NS
+      westConnectors, // EW
+      westConnectors, // NE
+      westConnectors, // ES
+      noWestConnectors, // SW
+      noWestConnectors, // WN
+      westConnectors, // NES
+      westConnectors, // ESW
+      noWestConnectors, // SWN
+      westConnectors, // WNE
+      westConnectors // NESW
+    }
+
+    MapModule[] northConnectors = new MapModule[] { MapModule.NS, MapModule.NE, MapModule.WN, MapModule.NES, MapModule.SWN, MapModule.WNE, MapModule.NESW };
+    MapModule[] noNorthConnectors = new MapModule[] { MapModule.EW, MapModule.ES, MapModule.SW, MapModule.ESW }
+    southConnections = new MapModule[][] {
+      noNorthConnectors, // empty
+      northConnectors, // NS
+      noNorthConnectors, // EW
+      noNorthConnectors, // NE
+      northConnectors, // ES
+      northConnectors, // SW
+      noNorthConnectors, // WN
+      northConnectors, // NES
+      northConnectors, // ESW
+      northConnectors, // SWN
+      noNorthConnectors, // WNE
+      northConnectors // NESW
+    }
+
+    MapModule[] eastConnectors = new MapModule[] { MapModule.EW, MapModule.NE, MapModule.ES, MapModule.NES, MapModule.ESW, MapModule.WNE, MapModule.NESW };
+    MapModule[] noEastConnectors = new MapModule[] { MapModule.NS, MapModule.SW, MapModule.WN, MapModule.SWN }
+    westConnections = new MapModule[] {
+      noEastConnectors, // empty
+      noEastConnectors, // NS
+      eastConnectors, // EW
+      noEastConnectors, // NE
+      noEastConnectors, // ES
+      eastConnectors, // SW
+      eastConnectors, // WN
+      noEastConnectors, // NES
+      eastConnectors, // ESW
+      eastConnectors, // SWN
+      eastConnectors, // WNE
+      eastConnectors // NESW
+    }
   }
 
   void InitializeMap () {
@@ -76,10 +135,10 @@ public class LevelGenerator : MonoBehaviour {
 
     for (int i = 0; i < modules.Length; i++) {
       MapModule m = modules[i];
-      if (upConnections[i].Contains(ToObject(map[row - 1, col])) &&
-          downConnections[i].Contains(ToObject(map[row + 1, col])) &&
-          leftConnections[i].Contains(ToObject(map[row, col - 1])) &&
-          rightConnections[i].Contains(ToObject(map[row, col + 1]))) {
+      if (northConnections[i].Contains(ToObject(map[row - 1, col])) && &&
+          eastConnections[i].Contains(ToObject(map[row, col + 1]))
+          southConnections[i].Contains(ToObject(map[row + 1, col])) &&
+          westConnections[i].Contains(ToObject(map[row, col - 1]))) {
         valid.Add(m);
       }
     }
