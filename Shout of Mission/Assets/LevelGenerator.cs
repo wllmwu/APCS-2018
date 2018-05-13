@@ -38,6 +38,10 @@ public class LevelGenerator : MonoBehaviour {
   private MapModule[] noNorthConnectors;
   private MapModule[] eastConnectors;
   private MapModule[] noEastConnectors;
+  private Dictionary<MapModule, MapModule> addSouthConnectors;
+  private Dictionary<MapModule, MapModule> addWestConnectors;
+  private Dictionary<MapModule, MapModule> addNorthConnectors;
+  private Dictionary<MapModule, MapModule> addEastConnectors;
 
 	// Use this for initialization
 	void Start () {
@@ -124,6 +128,31 @@ public class LevelGenerator : MonoBehaviour {
       eastConnectors, // SWN
       eastConnectors, // WNE
       eastConnectors // NESW
+    };
+
+    addSouthConnectors = new Dictionary<MapModule, MapModule>() {
+      { MapModule.EW, MapModule.ESW },
+      { MapModule.NE, MapModule.NES },
+      { MapModule.WN, MapModule.SWN },
+      { MapModule.WNE, MapModule.NESW }
+    };
+    addWestConnectors = new Dictionary<MapModule, MapModule>() {
+      { MapModule.NS, MapModule.SWN },
+      { MapModule.NE, MapModule.WNE },
+      { MapModule.ES, MapModule.ESW },
+      { MapModule.NES, MapModule.NESW }
+    };
+    addNorthConnectors = new Dictionary<MapModule, MapModule>() {
+      { MapModule.EW, MapModule.WNE },
+      { MapModule.ES, MapModule.NES },
+      { MapModule.SW, MapModule.SWN },
+      { MapModule.ESW, MapModule.NESW }
+    };
+    addEastConnectors = new Dictionary<MapModule, MapModule>() {
+      { MapModule.NS, MapModule.NES },
+      { MapModule.SW, MapModule.ESW },
+      { MapModule.WN, MapModule.WNE },
+      { MapModule.SWN, MapModule.NESW }
     };
   }
 
@@ -225,8 +254,9 @@ public class LevelGenerator : MonoBehaviour {
   }
 
   void TieLooseEnds(int r, int c, int looseEnds) {
+    MapModule newModule = MapModule.Empty;
     if (looseEnds == 4) {
-      map[r, c] = (int)MapModule.NESW;
+      newModule = MapModule.NESW;
     }
     else {
       bool north = ArrayContains(southConnectors, map[r - 1, c]);
@@ -234,27 +264,50 @@ public class LevelGenerator : MonoBehaviour {
       bool south = ArrayContains(northConnectors, map[r + 1, c]);
       bool west = ArrayContains(eastConnectors, map[r, c - 1]);
       if (looseEnds == 1) {
-        //
+        if (!north && addSouthConnectors.TryGetValue((MapModule)map[r - 1, c], out newLooseEnd)) {
+          map[r - 1, c] = (int)newLooseEnd;
+          north = true;
+        }
+        if (!east && addWestConnectors.TryGetValue((MapModule)map[r, c + 1], out newLooseEnd)) {
+          map[r, c + 1] = (int)newLooseEnd;
+          east = true;
+        }
+        if (!south && addNorthConnectors.TryGetValue((MapModule)map[r + 1, c], out newLooseEnd)) {
+          map[r + 1, c] = (int)newLooseEnd;
+          south = true;
+        }
+        if (!west && addEastConnectors.TryGetValue((MapModule)map[r, c - 1], out newLooseEnd)) {
+          map[r, c - 1] = (int)newLooseEnd;
+          west = true;
+        }
       }
-      else {
-        if (north && east) {
-          if (south) map[r, c] = (int)MapModule.NES;
-          else if (west) map[r, c] = (int)MapModule.WNE;
-          else map[r, c] = (int)MapModule.NE;
+      if (north && east) {
+        if (south) {
+          if (west) newModule = MapModule.NESW;
+          else newModule = MapModule.NES;
         }
-        else if (east && south) {
-          if (west) map[r, c] = (int)MapModule.ESW;
-          else map[r, c] = (int)MapModule.ES;
-        }
-        else if (south && west) {
-          if (north) map[r, c] = (int)MapModule.SWN;
-          else map[r, c] = (int)MapModule.SW;
-        }
-        else if (west && north) {
-          map[r, c] = (int)MapModule.WN;
-        }
+        else if (west) newModule = MapModule.WNE;
+        else newModule = MapModule.NE;
+      }
+      else if (east && south) {
+        if (west) newModule = MapModule.ESW;
+        else newModule = MapModule.ES;
+      }
+      else if (south && west) {
+        if (north) newModule = MapModule.SWN;
+        else newModule = MapModule.SW;
+      }
+      else if (west && north) {
+        newModule = MapModule.WN;
+      }
+      else if (north && south) {
+        newModule = MapModule.NS;
+      }
+      else if (east && west) {
+        newModule = MapModule.EW;
       }
     }
+    map[r, c] = newModule;
   }
 
   void DisplayMap () {
