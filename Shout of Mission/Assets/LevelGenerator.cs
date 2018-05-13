@@ -264,6 +264,7 @@ public class LevelGenerator : MonoBehaviour {
       bool south = ArrayContains(northConnectors, map[r + 1, c]);
       bool west = ArrayContains(eastConnectors, map[r, c - 1]);
       if (looseEnds == 1) {
+        MapModule newLooseEnd = MapModule.Empty;
         if (!north && addSouthConnectors.TryGetValue((MapModule)map[r - 1, c], out newLooseEnd)) {
           map[r - 1, c] = (int)newLooseEnd;
           north = true;
@@ -307,61 +308,67 @@ public class LevelGenerator : MonoBehaviour {
         newModule = MapModule.EW;
       }
     }
-    map[r, c] = newModule;
+    map[r, c] = (int)newModule;
   }
 
   void DisplayMap () {
     string output = "";
-    string numbers = "";
+    // string numbers = "";
     for (int r = 0; r < rows; r++) {
       for (int c = 0; c < cols; c++) {
-        numbers += "" + map[r,c] + " ";
-        switch(map[r,c]) {
-          case 0: // empty
-            output += "O";
-            break;
-          case 1: // NS
-            output += "\u2502";
-            break;
-          case 2: // EW
-            output += "\u2500";
-            break;
-          case 3: // NE
-            output += "\u2514";
-            break;
-          case 4: // ES
-            output += "\u250c";
-            break;
-          case 5: // SW
-            output += "\u2510";
-            break;
-          case 6: // WN
-            output += "\u2518";
-            break;
-          case 7: // NES
-            output += "\u251c";
-            break;
-          case 8: // ESW
-            output += "\u252c";
-            break;
-          case 9: // SWN
-            output += "\u2524";
-            break;
-          case 10: // WNE
-            output += "\u2534";
-            break;
-          case 11: // NESW
-            output += "\u253c";
-            break;
-          default:
-            output += "X";
-            break;
+        if (r == spawnRow && c = spawnCol) {
+          output += "\u2588";
+        }
+        else {
+          // numbers += "" + map[r,c] + " ";
+          switch(map[r,c]) {
+            case 0: // empty
+              output += "O";
+              break;
+            case 1: // NS
+              output += "\u2502";
+              break;
+            case 2: // EW
+              output += "\u2500";
+              break;
+            case 3: // NE
+              output += "\u2514";
+              break;
+            case 4: // ES
+              output += "\u250c";
+              break;
+            case 5: // SW
+              output += "\u2510";
+              break;
+            case 6: // WN
+              output += "\u2518";
+              break;
+            case 7: // NES
+              output += "\u251c";
+              break;
+            case 8: // ESW
+              output += "\u252c";
+              break;
+            case 9: // SWN
+              output += "\u2524";
+              break;
+            case 10: // WNE
+              output += "\u2534";
+              break;
+            case 11: // NESW
+              output += "\u253c";
+              break;
+            default: // border
+              output += "X";
+              break;
+          }
         }
       }
-      numbers += "\n";
+      // numbers += "\n";
       output += "\n";
     }
-    Debug.Log(numbers);
+    output += "Spawn: row = " + spawnRow + ", col = " + spawnCol;
+    // Debug.Log(numbers);
     Debug.Log(output);
   }
 }
