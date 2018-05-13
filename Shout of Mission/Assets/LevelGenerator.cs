@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour {
-  private int rows = 10;
-  private int cols = 10;
-  private int[,] map;
-  private int spawnRow = 0;
-  private int spawnCol = 0;
   private enum MapModule : int {
     Empty = 0,
     NS, // 1
@@ -42,7 +37,12 @@ public class LevelGenerator : MonoBehaviour {
   private Dictionary<MapModule, MapModule> addWestConnectors;
   private Dictionary<MapModule, MapModule> addNorthConnectors;
   private Dictionary<MapModule, MapModule> addEastConnectors;
-
+  private int rows = 10;
+  private int cols = 10;
+  private MapModule[,] map;
+  private int spawnRow = 0;
+  private int spawnCol = 0;
+  
 	// Use this for initialization
 	void Start () {
 		InitializeModules();
@@ -157,21 +157,21 @@ public class LevelGenerator : MonoBehaviour {
   }
 
   void InitializeMap () {
-    map = new int[rows, cols];
+    map = new MapModule[rows, cols];
     for (int c = 0; c < cols; c++) {
-      map[0, c] = (int)MapModule.Border;
-      map[rows - 1, c] = (int)MapModule.Border;
+      map[0, c] = MapModule.Border;
+      map[rows - 1, c] = MapModule.Border;
     }
     for (int r = 1; r < rows - 1; r++) {
-      map[r, 0] = (int)MapModule.Border;
-      map[r, cols - 1] = (int)MapModule.Border;
+      map[r, 0] = MapModule.Border;
+      map[r, cols - 1] = MapModule.Border;
     }
 
     Random.InitState(System.DateTime.Now.Millisecond);
     for (int r = 1; r < rows - 1; r++) {
       for (int c = 1; c < cols - 1; c++) {
         List<MapModule> valid = GetValidMapModules (r, c);
-        map[r, c] = (int)(valid[Random.Range (0, valid.Count)]);
+        map[r, c] = valid[Random.Range (0, valid.Count)];
       }
     }
   }
@@ -196,9 +196,9 @@ public class LevelGenerator : MonoBehaviour {
     return valid;
   }
 
-  bool ArrayContains(MapModule[] array, int x) {
+  bool ArrayContains(MapModule[] array, MapModule x) {
     foreach (MapModule m in array) {
-      if (m == (MapModule)x) {
+      if (m == x) {
         return true;
       }
     }
@@ -210,7 +210,7 @@ public class LevelGenerator : MonoBehaviour {
     List<int> colValues = new List<int>();
     for (int r = 2; r < rows - 2; r++) {
       for (int c = 2; c < cols - 2; c++) {
-        if (map[r, c] == (int)MapModule.NESW) {
+        if (map[r, c] == MapModule.NESW) {
           rowValues.Add(r);
           colValues.Add(c);
         }
@@ -231,7 +231,7 @@ public class LevelGenerator : MonoBehaviour {
     for (int r = 1; r < rows - 1; r++) {
       for (int c = 1; c < cols - 1; c++) {
         int looseEnds = CountLooseEnds(r, c);
-        if (map[r, c] == (int)MapModule.Empty && looseEnds > 0) {
+        if (map[r, c] == MapModule.Empty && looseEnds > 0) {
           TieLooseEnds(r, c, looseEnds);
         }
       }
@@ -266,19 +266,19 @@ public class LevelGenerator : MonoBehaviour {
       if (looseEnds == 1) {
         MapModule newLooseEnd = MapModule.Empty;
         if (!north && addSouthConnectors.TryGetValue((MapModule)map[r - 1, c], out newLooseEnd)) {
-          map[r - 1, c] = (int)newLooseEnd;
+          map[r - 1, c] = newLooseEnd;
           north = true;
         }
         if (!east && addWestConnectors.TryGetValue((MapModule)map[r, c + 1], out newLooseEnd)) {
-          map[r, c + 1] = (int)newLooseEnd;
+          map[r, c + 1] = newLooseEnd;
           east = true;
         }
         if (!south && addNorthConnectors.TryGetValue((MapModule)map[r + 1, c], out newLooseEnd)) {
-          map[r + 1, c] = (int)newLooseEnd;
+          map[r + 1, c] = newLooseEnd;
           south = true;
         }
         if (!west && addEastConnectors.TryGetValue((MapModule)map[r, c - 1], out newLooseEnd)) {
-          map[r, c - 1] = (int)newLooseEnd;
+          map[r, c - 1] = newLooseEnd;
           west = true;
         }
       }
@@ -308,7 +308,7 @@ public class LevelGenerator : MonoBehaviour {
         newModule = MapModule.EW;
       }
     }
-    map[r, c] = (int)newModule;
+    map[r, c] = newModule;
   }
 
   void DisplayMap () {
@@ -322,40 +322,40 @@ public class LevelGenerator : MonoBehaviour {
         else {
           // numbers += "" + map[r,c] + " ";
           switch(map[r,c]) {
-            case 0: // empty
+            case MapModule.Empty:
               output += "O";
               break;
-            case 1: // NS
+            case MapModule.NS:
               output += "\u2502";
               break;
-            case 2: // EW
+            case MapModule.EW:
               output += "\u2500";
               break;
-            case 3: // NE
+            case MapModule.NE:
               output += "\u2514";
               break;
-            case 4: // ES
+            case MapModule.ES:
               output += "\u250c";
               break;
-            case 5: // SW
+            case MapModule.SW:
               output += "\u2510";
               break;
-            case 6: // WN
+            case MapModule.WN:
               output += "\u2518";
               break;
-            case 7: // NES
+            case MapModule.NES:
               output += "\u251c";
               break;
-            case 8: // ESW
+            case MapModule.ESW:
               output += "\u252c";
               break;
-            case 9: // SWN
+            case MapModule.SWN:
               output += "\u2524";
               break;
-            case 10: // WNE
+            case MapModule.WNE:
               output += "\u2534";
               break;
-            case 11: // NESW
+            case MapModule.NESW:
               output += "\u253c";
               break;
             default: // border
