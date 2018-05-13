@@ -316,7 +316,7 @@ public class LevelGenerator : MonoBehaviour {
     // string numbers = "";
     for (int r = 0; r < rows; r++) {
       for (int c = 0; c < cols; c++) {
-        if (r == spawnRow && c = spawnCol) {
+        if (r == spawnRow && c === spawnCol) {
           output += "\u2588";
         }
         else {
