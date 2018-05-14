@@ -37,31 +37,43 @@ public class LevelGenerator : MonoBehaviour {
   private Dictionary<MapModule, MapModule> addWestConnectors;
   private Dictionary<MapModule, MapModule> addNorthConnectors;
   private Dictionary<MapModule, MapModule> addEastConnectors;
-  private int rows = 10;
-  private int cols = 10;
+
+  public int rows = 10;
+  public int cols = 10;
   private MapModule[,] map;
   private int spawnRow = 0;
   private int spawnCol = 0;
+  public int moduleSize = 20;
+  
+  public GameObject spawnRoomPrefab;
+  public GameObject[] NSPrefabs;
+  public GameObject[] EWPrefabs;
+  public GameObject[] NEPrefabs;
+  public GameObject[] ESPrefabs;
+  public GameObject[] SWPrefabs;
+  public GameObject[] WNPrefabs;
+  public GameObject[] NESPrefabs;
+  public GameObject[] ESWPrefabs;
+  public GameObject[] SWNPrefabs;
+  public GameObject[] WNEPrefabs;
+  public GameObject[] NESWPrefabs;
+  private GameObject[][] mapModulePrefabs;
+
+  void Awake () {
+    InitializeModules();
+    SetUpMap();
+  }
   
 	// Use this for initialization
 	void Start () {
-		InitializeModules();
-    SetUpMap();
-	}
+    AssembleMap();
+    SpawnPlayer();
+  }
 	
 	// Update is called once per frame
-	void Update () {
-		
-	}
+	void Update () {}
 
-  void SetUpMap() {
-    InitializeMap();
-    PickSpawnRoomLocation();
-    FixDeadEnds();
-    DisplayMap();
-  }
-
-  void InitializeModules () {
+  private void InitializeModules () {
     southConnectors = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.ES, MapModule.SW, MapModule.NES, MapModule.ESW, MapModule.SWN, MapModule.NESW };
     noSouthConnectors = new MapModule[] { MapModule.Empty, MapModule.EW, MapModule.NE, MapModule.WN, MapModule.WNE, MapModule.Border };
     northConnections = new MapModule[][] {
@@ -154,9 +166,20 @@ public class LevelGenerator : MonoBehaviour {
       { MapModule.WN, MapModule.WNE },
       { MapModule.SWN, MapModule.NESW }
     };
+
+    mapModulePrefabs = new GameObject[][] {
+      NSPrefabs, EWPrefabs, NEPrefabs, ESPrefabs, SWPrefabs, WNPrefabs, NESPrefabs, ESWPrefabs, SWNPrefabs, WNEPrefabs, NESWPrefabs
+    };
   }
 
-  void InitializeMap () {
+  private void SetUpMap() {
+    InitializeMap();
+    PickSpawnRoomLocation();
+    FixDeadEnds();
+    DisplayMap();
+  }
+
+  private void InitializeMap () {
     map = new MapModule[rows, cols];
     for (int c = 0; c < cols; c++) {
       map[0, c] = MapModule.Border;
@@ -176,7 +199,7 @@ public class LevelGenerator : MonoBehaviour {
     }
   }
 
-  List<MapModule> GetValidMapModules (int row, int col) {
+  private List<MapModule> GetValidMapModules (int row, int col) {
     List<MapModule> valid = new List<MapModule>();
 
     for (int i = 0; i < modules.Length - 1; i++) {
@@ -196,7 +219,7 @@ public class LevelGenerator : MonoBehaviour {
     return valid;
   }
 
-  bool ArrayContains(MapModule[] array, MapModule x) {
+  private bool ArrayContains(MapModule[] array, MapModule x) {
     foreach (MapModule m in array) {
       if (m == x) {
         return true;
@@ -205,7 +228,7 @@ public class LevelGenerator : MonoBehaviour {
     return false;
   }
 
-  void PickSpawnRoomLocation() {
+  private void PickSpawnRoomLocation() {
     List<int> rowValues = new List<int>();
     List<int> colValues = new List<int>();
     for (int r = 2; r < rows - 2; r++) {
@@ -227,7 +250,7 @@ public class LevelGenerator : MonoBehaviour {
     }
   }
 
-  void FixDeadEnds() {
+  private void FixDeadEnds() {
     for (int r = 1; r < rows - 1; r++) {
       for (int c = 1; c < cols - 1; c++) {
         int looseEnds = CountLooseEnds(r, c);
@@ -238,22 +261,16 @@ public class LevelGenerator : MonoBehaviour {
     }
   }
 
-  int CountLooseEnds(int r, int c) {
+  private int CountLooseEnds(int r, int c) {
     int looseEnds = 0;
     looseEnds += ArrayContains(southConnectors, map[r - 1, c]) ? 1 : 0;
     looseEnds += ArrayContains(westConnectors, map[r, c + 1]) ? 1 : 0;
     looseEnds += ArrayContains(northConnectors, map[r + 1, c]) ? 1 : 0;
     looseEnds += ArrayContains(eastConnectors, map[r, c - 1]) ? 1 : 0;
-    /*if (ArrayContains(southConnectors, map[r - 1, c])) {
-      looseEnds++;
-    }
-    if (ArrayContains(westConnectors, map[r, c + 1])) {
-      looseEnds++;
-    }*/
     return looseEnds;
   }
 
-  void TieLooseEnds(int r, int c, int looseEnds) {
+  private void TieLooseEnds(int r, int c, int looseEnds) {
     MapModule newModule = MapModule.Empty;
     if (looseEnds == 4) {
       newModule = MapModule.NESW;
@@ -311,16 +328,14 @@ public class LevelGenerator : MonoBehaviour {
     map[r, c] = newModule;
   }
 
-  void DisplayMap () {
+  private void DisplayMap () {
     string output = "";
-    // string numbers = "";
     for (int r = 0; r < rows; r++) {
       for (int c = 0; c < cols; c++) {
         if (r == spawnRow && c == spawnCol) {
           output += "\u2588";
         }
         else {
-          // numbers += "" + map[r,c] + " ";
           switch(map[r,c]) {
             case MapModule.Empty:
               output += "O";
@@ -364,11 +379,73 @@ public class LevelGenerator : MonoBehaviour {
           }
         }
       }
-      // numbers += "\n";
       output += "\n";
     }
     output += "Spawn: row = " + spawnRow + ", col = " + spawnCol;
-    // Debug.Log(numbers);
     Debug.Log(output);
+  }
+
+  private void AssembleMap() {
+    for (int r = 1; r < rows - 1; r++) {
+      for (int c = 1; c < cols - 1; c++) {
+        GameObject prefab = spawnRoomPrefab;
+        if (r != spawnRow || c != spawnCol) {
+          int x = 1;
+          switch(map[r,c]) {
+            case MapModule.NS:
+              x = Random.Range(0, NSPrefabs.Length);
+              prefab = NSPrefabs[x];
+              break;
+            case MapModule.EW:
+              x = Random.Range(0, EWPrefabs.Length);
+              prefab = EWPrefabs[x];
+              break;
+            case MapModule.NE:
+              x = Random.Range(0, NEPrefabs.Length);
+              prefab = NEPrefabs[x];
+              break;
+            case MapModule.ES:
+              x = Random.Range(0, ESPrefabs.Length);
+              prefab = ESPrefabs[x];
+              break;
+            case MapModule.SW:
+              x = Random.Range(0, SWPrefabs.Length);
+              prefab = SWPrefabs[x];
+              break;
+            case MapModule.WN:
+              x = Random.Range(0, WNPrefabs.Length);
+              prefab = WNPrefabs[x];
+              break;
+            case MapModule.NES:
+              x = Random.Range(0, NESPrefabs.Length);
+              prefab = NESPrefabs[x];
+              break;
+            case MapModule.ESW:
+              x = Random.Range(0, ESWPrefabs.Length);
+              prefab = ESWPrefabs[x];
+              break;
+            case MapModule.SWN:
+              x = Random.Range(0, SWNPrefabs.Length);
+              prefab = SWNPrefabs[x];
+              break;
+            case MapModule.WNE:
+              x = Random.Range(0, WNEPrefabs.Length);
+              prefab = WNEPrefabs[x];
+              break;
+            case MapModule.NESW:
+              x = Random.Range(0, NESWPrefabs.Length);
+              prefab = NESWPrefabs[x];
+              break;
+            default:
+              continue;
+          }
+        }
+        Instantiate(prefab, new Vector3(r * moduleSize, 0, c * moduleSize), prefab.transform.rotation);
+      }
+    }
+  }
+
+  private void SpawnPlayer() {
+    //
   }
 }
