@@ -916,6 +916,7 @@ MonoBehaviour:
   NESWPrefabs:
   - {fileID: 1406476196303574, guid: f55a1586b8ac74ff58b6ee3542931a2c, type: 2}
   - {fileID: 1053035803197286, guid: 91d4fa9ef98e8424fa19db78aa3b9c94, type: 2}
+  player: {fileID: 1454034672}
 --- !u!4 &1754440405
 Transform:
   m_ObjectHideFlags: 0

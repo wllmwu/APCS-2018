@@ -57,7 +57,8 @@ public class LevelGenerator : MonoBehaviour {
   public GameObject[] SWNPrefabs;
   public GameObject[] WNEPrefabs;
   public GameObject[] NESWPrefabs;
-  private GameObject[][] mapModulePrefabs;
+
+  public GameObject player;
 
   void Awake () {
     InitializeModules();
@@ -165,10 +166,6 @@ public class LevelGenerator : MonoBehaviour {
       { MapModule.SW, MapModule.ESW },
       { MapModule.WN, MapModule.WNE },
       { MapModule.SWN, MapModule.NESW }
-    };
-
-    mapModulePrefabs = new GameObject[][] {
-      NSPrefabs, EWPrefabs, NEPrefabs, ESPrefabs, SWPrefabs, WNPrefabs, NESPrefabs, ESWPrefabs, SWNPrefabs, WNEPrefabs, NESWPrefabs
     };
   }
 
@@ -446,6 +443,6 @@ public class LevelGenerator : MonoBehaviour {
   }
 
   private void SpawnPlayer() {
-    //
+    player.transform.position = new Vector3(spawnRow * moduleSize, 5, spawnCol * moduleSize);
   }
 }
