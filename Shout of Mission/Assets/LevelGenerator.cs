@@ -59,6 +59,7 @@ public class LevelGenerator : MonoBehaviour {
   public GameObject[] NESWPrefabs;
 
   public GameObject player;
+  public bool spawnsPlayer = true;
 
   void Awake () {
     InitializeModules();
@@ -68,7 +69,7 @@ public class LevelGenerator : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
     AssembleMap();
-    SpawnPlayer();
+    if (spawnsPlayer) SpawnPlayer();
   }
 	
 	// Update is called once per frame
