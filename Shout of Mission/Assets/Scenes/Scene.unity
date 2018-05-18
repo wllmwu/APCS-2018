@@ -1401,41 +1401,41 @@ MonoBehaviour:
   rows: 10
   cols: 10
   moduleSize: 20
-  spawnRoomPrefab: {fileID: 1468479786260020, guid: adbca941a53114d3798ac3830cea3db4,
+  spawnRoomPrefab: {fileID: 1646311367713198, guid: adbca941a53114d3798ac3830cea3db4,
     type: 2}
   NSPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1022157111807516, guid: eec90a456ab9e49c3ac7f736ed0e32fa, type: 2}
+  - {fileID: 1621101703694986, guid: a2125e9613f384b3693743cc469a2db7, type: 2}
   EWPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1467950233493564, guid: b285fb870179c4038b06a5848ea09fc0, type: 2}
+  - {fileID: 1989350212564444, guid: 8471a705386d146a7a058a9b8cf0615f, type: 2}
   NEPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1070512741022144, guid: e62fdd7f6e6cc446f8ce3cfe1178b976, type: 2}
+  - {fileID: 1691689621514656, guid: 70f6da9dc9ae74e538cb19961ae73785, type: 2}
   ESPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1102811702645716, guid: c2966e57ddbdb41ef922e4eef5ccd4ab, type: 2}
+  - {fileID: 1951971254502906, guid: 1bf89a9c38d0a49508683e9aee83d4c9, type: 2}
   SWPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1111719198290018, guid: 724e58a6cf1e647d58a8a1debbcb7d0d, type: 2}
+  - {fileID: 1862943326145740, guid: 21f7f4896b7e74e33a8b84f29b24ab4f, type: 2}
   WNPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1479333269482422, guid: 5db615eebcb2d42879a2e2308fee33df, type: 2}
+  - {fileID: 1882187006159806, guid: d58f6ebcadaa648a9a65a241758a8d03, type: 2}
   NESPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1192549712263152, guid: 830b5f9a472234256bdb358b3c45851d, type: 2}
+  - {fileID: 1272038790781002, guid: b360e9d87979542d8a9c0f0e8ac6fa7d, type: 2}
   ESWPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1745282691836052, guid: a1291b6f459114ffa996b9348390f707, type: 2}
+  - {fileID: 1520963338592190, guid: 1bfdbeb20299a45e7b8c3e1f824f4b43, type: 2}
   SWNPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1679452003427910, guid: 24c0c5b476359461c8128aec1957ef6d, type: 2}
+  - {fileID: 1066692013090724, guid: 40343b83d55c54cfd98ec23e0bdcafcd, type: 2}
   WNEPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1381001667411112, guid: 7ea725dd4401542cd9727f788414b8d2, type: 2}
+  - {fileID: 1987982335205616, guid: a7e487a4fbe284aa1a6ea5d80c4e3f5a, type: 2}
   NESWPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1508414963672624, guid: f55a1586b8ac74ff58b6ee3542931a2c, type: 2}
+  - {fileID: 1378040029802110, guid: 91d4fa9ef98e8424fa19db78aa3b9c94, type: 2}
   player: {fileID: 1454034672}
   spawnsPlayer: 1
 --- !u!4 &1754440405
@@ -1661,7 +1661,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1947878758}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cebcbf0f8629144449aaf80609cb7fb2, type: 3}
   m_Name: 
