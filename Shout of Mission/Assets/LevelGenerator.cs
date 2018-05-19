@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class LevelGenerator : MonoBehaviour {
   private enum MapModule : int {
@@ -60,6 +61,7 @@ public class LevelGenerator : MonoBehaviour {
 
   public GameObject player;
   public bool spawnsPlayer = true;
+  public GameObject enemy;
 
   void Awake () {
     InitializeModules();
@@ -435,12 +437,14 @@ public class LevelGenerator : MonoBehaviour {
               continue;
           }
         }
-        Instantiate(prefab, new Vector3(c * moduleSize, 0, (rows - r - 1) * moduleSize), prefab.transform.rotation);
+        GameObject module = (GameObject) Instantiate(prefab, new Vector3(c * moduleSize, 0, (rows - r - 1) * moduleSize), prefab.transform.rotation);
+        module.GetComponent<NavMeshSurface>().BuildNavMesh();
       }
     }
   }
 
   private void SpawnPlayer() {
     player.transform.position = new Vector3(spawnCol * moduleSize, 5, (rows - spawnRow - 1) * moduleSize);
+    enemy.transform.position = new Vector3(spawnCol * moduleSize, 0, (rows - spawnRow - 1) * moduleSize);
   }
 }
