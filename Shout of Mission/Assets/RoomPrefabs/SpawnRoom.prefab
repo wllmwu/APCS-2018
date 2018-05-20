@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 23457676484776964}
   - component: {fileID: 64093615528083178}
   - component: {fileID: 114441437561746028}
+  - component: {fileID: 208988332523465948}
   m_Layer: 0
   m_Name: SpawnRoom
   m_TagString: Untagged
@@ -127,3 +128,18 @@ MonoBehaviour:
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 23800000, guid: 0ec71cdf879004a27a579cd90094a6bd, type: 2}
+--- !u!208 &208988332523465948
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1646311367713198}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.1, y: 0.05, z: 0.1}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.05, z: 0}
+  m_TimeToStationary: 0.5
