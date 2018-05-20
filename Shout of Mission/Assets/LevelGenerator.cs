@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class LevelGenerator : MonoBehaviour {
   private enum MapModule : int {
@@ -437,8 +436,7 @@ public class LevelGenerator : MonoBehaviour {
               continue;
           }
         }
-        GameObject module = (GameObject) Instantiate(prefab, new Vector3(c * moduleSize, 0, (rows - r - 1) * moduleSize), prefab.transform.rotation);
-        module.GetComponent<NavMeshSurface>().BuildNavMesh();
+        Instantiate(prefab, new Vector3(c * moduleSize, 0, (rows - r - 1) * moduleSize), prefab.transform.rotation);
       }
     }
   }

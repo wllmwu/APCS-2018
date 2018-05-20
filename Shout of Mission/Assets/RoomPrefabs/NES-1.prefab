@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33114299447094258}
   - component: {fileID: 23136759785545190}
   - component: {fileID: 64064271253244206}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: NES-1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

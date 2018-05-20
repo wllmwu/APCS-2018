@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33107813691439862}
   - component: {fileID: 23762816454797606}
   - component: {fileID: 64017643780977812}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ESW-0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

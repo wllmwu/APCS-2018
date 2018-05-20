@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33389681996999262}
   - component: {fileID: 23630594206376434}
   - component: {fileID: 64644262976304906}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: NESW-1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
