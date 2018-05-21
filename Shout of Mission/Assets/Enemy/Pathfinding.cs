@@ -26,7 +26,7 @@ public class Pathfinding : MonoBehaviour {
     while (openSet.Count > 0) {
       Node currentNode = openSet[0];
       for (int i = 1; i < openSet.Count; i++) {
-        if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost) {
+        if ((openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost) && openSet[i].hCost < currentNode.hCost) {
           currentNode = openSet[i];
         }
       }
@@ -72,7 +72,7 @@ public class Pathfinding : MonoBehaviour {
   int GetDistance(Node nodeA, Node nodeB) {
     int distX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
     int distY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
-    if (distX < distY) {
+    if (distX > distY) {
       return 14 * distY + 10 * (distX - distY);
     }
     return 14 * distX + 10 * (distY - distX);
