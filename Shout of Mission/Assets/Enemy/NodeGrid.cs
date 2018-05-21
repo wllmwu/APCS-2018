@@ -11,6 +11,11 @@ public class NodeGrid : MonoBehaviour {
 
   float nodeDiameter;
   int gridSizeX, gridSizeY;
+  public int MaxSize {
+    get {
+      return gridSizeX * gridSizeY;
+    }
+  }
 
   void Awake() {
     nodeDiameter = nodeRadius * 2;
