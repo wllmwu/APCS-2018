@@ -8,6 +8,7 @@ public class NodeGrid : MonoBehaviour {
   public Vector2 gridWorldSize;
   public float nodeRadius;
   Node[,] grid;
+  public bool shouldDrawGizmos;
 
   float nodeDiameter;
   int gridSizeX, gridSizeY;
@@ -60,19 +61,14 @@ public class NodeGrid : MonoBehaviour {
     return neighbors;
   }
 
-  public List<Node> path;
   void OnDrawGizmos() {
-    Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
-
-    if (grid != null) {
-      foreach (Node n in grid) {
-        Gizmos.color = (n.walkable) ? Color.white : Color.red;
-        if (path != null) {
-          if (path.Contains(n)) {
-            Gizmos.color = Color.black;
-          }
+    if (shouldDrawGizmos) {
+      Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
+      if (grid != null) {
+        foreach (Node n in grid) {
+          Gizmos.color = (n.walkable) ? Color.white : Color.red;
+          Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
         }
-        Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
       }
     }
   }
