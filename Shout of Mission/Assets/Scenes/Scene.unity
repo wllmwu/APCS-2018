@@ -1771,7 +1771,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400060, guid: 6dcc25891c46f4a6e90cfd890207d266, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 256.29
+      value: 235.08
       objectReference: {fileID: 0}
     - target: {fileID: 400060, guid: 6dcc25891c46f4a6e90cfd890207d266, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1824,6 +1824,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1522507714}
+  shouldDrawGizmos: 0
 --- !u!4 &1947878761 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400060, guid: 6dcc25891c46f4a6e90cfd890207d266, type: 3}

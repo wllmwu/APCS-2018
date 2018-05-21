@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : Entity {
 
 	public Transform target;
   float speed = 0.1f;
@@ -20,6 +20,9 @@ public class Enemy : MonoBehaviour {
       StopCoroutine("FollowPath");
       StartCoroutine("FollowPath");
     }
+    else {
+      Die();
+    }
   }
 
   IEnumerator FollowPath() {
@@ -33,8 +36,14 @@ public class Enemy : MonoBehaviour {
         nextWaypoint = path[pathTargetIndex];
       }
       transform.position = Vector3.MoveTowards(transform.position, nextWaypoint, speed);
+      Quaternion look = Quaternion.LookRotation(nextWaypoint - transform.position);
+      transform.rotation = Quaternion.Slerp(transform.rotation, look, Time.deltaTime * 5);
       yield return null;
     }
+  }
+
+  void Fire() {
+    //
   }
 
   public void OnDrawGizmos() {
