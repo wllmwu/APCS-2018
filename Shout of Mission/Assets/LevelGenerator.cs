@@ -59,20 +59,16 @@ public class LevelGenerator : MonoBehaviour {
   public GameObject[] NESWPrefabs;
 
   public GameObject player;
+  public bool spawnsPlayer = true;
+  public GameObject enemy;
 
   void Awake () {
     InitializeModules();
     SetUpMap();
-  }
-  
-	// Use this for initialization
-	void Start () {
     AssembleMap();
-    SpawnPlayer();
+    if (spawnsPlayer) SpawnPlayer();
+    if (spawnsPlayer) SpawnEnemies();
   }
-	
-	// Update is called once per frame
-	void Update () {}
 
   private void InitializeModules () {
     southConnectors = new MapModule[] { MapModule.Empty, MapModule.NS, MapModule.ES, MapModule.SW, MapModule.NES, MapModule.ESW, MapModule.SWN, MapModule.NESW };
@@ -437,12 +433,16 @@ public class LevelGenerator : MonoBehaviour {
               continue;
           }
         }
-        Instantiate(prefab, new Vector3(r * moduleSize, 0, c * moduleSize), prefab.transform.rotation);
+        Instantiate(prefab, new Vector3(c * moduleSize, 0, (rows - r - 1) * moduleSize), prefab.transform.rotation);
       }
     }
   }
 
   private void SpawnPlayer() {
-    player.transform.position = new Vector3(spawnRow * moduleSize, 5, spawnCol * moduleSize);
+    player.transform.position = new Vector3(spawnCol * moduleSize, 5, (rows - spawnRow - 1) * moduleSize);
+  }
+
+  private void SpawnEnemies() {
+    enemy.transform.position = new Vector3(spawnCol * moduleSize + 20, 0.1f, (rows - spawnRow - 1) * moduleSize + 20);
   }
 }

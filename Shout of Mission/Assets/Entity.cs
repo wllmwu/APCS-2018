@@ -13,7 +13,8 @@ public class Entity : MonoBehaviour {
 		}
 	}
 
-	void Die(){
+	protected void Die(){
 		Destroy(gameObject);
 	}
+  
 }
