@@ -6,15 +6,15 @@ public class Entity : MonoBehaviour {
 
 	public float health = 100f;
 
-  public void TakeDamage(float damage) {
-    health -= damage;
-    if (health <= 0) {
-      Die();
-    }
-  }
+	public void TakeDamage(float amount){
+		health -= amount;
+		if (health <= 0){
+			Die();
+		}
+	}
 
-  protected void Die() {
-    Destroy(gameObject);
-  }
-
+	void Die(){
+		Destroy(gameObject);
+	}
+  
 }
