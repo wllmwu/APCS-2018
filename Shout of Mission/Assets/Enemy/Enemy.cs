@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : Entity {
 
 	public Transform target;
-  float speed = 0.1f;
+  float speed = 0.3f;
   Vector3[] path;
   int pathTargetIndex;
   public bool shouldDrawGizmos;

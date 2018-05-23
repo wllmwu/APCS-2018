@@ -65,12 +65,9 @@ public class LevelGenerator : MonoBehaviour {
   void Awake () {
     InitializeModules();
     SetUpMap();
-  }
-  
-	// Use this for initialization
-	void Start () {
     AssembleMap();
     if (spawnsPlayer) SpawnPlayer();
+    if (spawnsPlayer) SpawnEnemies();
   }
 
   private void InitializeModules () {
@@ -443,6 +440,9 @@ public class LevelGenerator : MonoBehaviour {
 
   private void SpawnPlayer() {
     player.transform.position = new Vector3(spawnCol * moduleSize, 5, (rows - spawnRow - 1) * moduleSize);
-    enemy.transform.position = new Vector3(spawnCol * moduleSize, 0, (rows - spawnRow - 1) * moduleSize);
+  }
+
+  private void SpawnEnemies() {
+    enemy.transform.position = new Vector3(spawnCol * moduleSize + 20, 0.1f, (rows - spawnRow - 1) * moduleSize + 20);
   }
 }
