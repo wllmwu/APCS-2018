@@ -11,6 +11,10 @@ public class Enemy : Entity {
   public bool shouldDrawGizmos;
 
   void Start() {
+    Invoke("RequestNewPath", 1);
+  }
+
+  void RequestNewPath() {
     PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
   }
 

@@ -36,6 +36,7 @@ public class NodeGrid : MonoBehaviour {
         grid[x,y] = new Node(walkable, worldPoint, x, y);
       }
     }
+    Debug.Log("CreateGrid");
   }
 
   public Node NodeFromWorldPoint(Vector3 worldPoint) {
