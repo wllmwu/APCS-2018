@@ -8,6 +8,7 @@ public class Enemy : Entity {
   float speed = 0.3f;
   Vector3[] path;
   int pathTargetIndex;
+  Vector3 lookDirection;
   public bool shouldDrawGizmos;
 
   void Start() {
@@ -32,6 +33,7 @@ public class Enemy : Entity {
   IEnumerator FollowPath() {
     Vector3 nextWaypoint = path[0];
     while (true) {
+      bool targetInLOS = TargetInLineOfSight();
       if (transform.position == nextWaypoint) {
         pathTargetIndex++;
         if (pathTargetIndex >= path.Length) {
@@ -39,10 +41,13 @@ public class Enemy : Entity {
         }
         nextWaypoint = path[pathTargetIndex];
       }
+      if (targetInLOS && DistanceToTarget() <= 20) {
+        yield break;
+      }
       transform.position = Vector3.MoveTowards(transform.position, nextWaypoint, speed);
       Quaternion look;
-      if (TargetInLineOfSight()) {
-        look = Quaternion.LookRotation(target.position - transform.position);
+      if (targetInLOS) {
+        look = Quaternion.LookRotation(lookDirection);
       }
       else {
         look = Quaternion.LookRotation(nextWaypoint - transform.position);
@@ -53,12 +58,18 @@ public class Enemy : Entity {
   }
 
   bool TargetInLineOfSight() {
-    Vector3 lookDirection = new Vector3(target.position.x - transform.position.x, 0, target.position.z - transform.position.z);
+    lookDirection = new Vector3(target.position.x - transform.position.x, 0, target.position.z - transform.position.z);
     RaycastHit hit;
     if (Physics.Raycast(transform.position + Vector3.up, lookDirection, out hit) && hit.transform == target) {
       return true;
     }
     return false;
+  }
+
+  float DistanceToTarget() {
+    float dist = Vector3.Distance(target.position, transform.position);
+    Debug.Log("distance: " + dist);
+    return dist;
   }
 
   void Fire() {
