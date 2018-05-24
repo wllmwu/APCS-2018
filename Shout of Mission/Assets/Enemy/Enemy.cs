@@ -55,19 +55,11 @@ public class Enemy : Entity {
   }
 
   bool TargetInLineOfSight() {
-    Debug.Log("transform: " + transform.position + " target: " + target.position);
     lookDirection = new Vector3(target.position.x - transform.position.x, 0, target.position.z - transform.position.z);
-    Debug.Log("look direction: " + lookDirection);
     RaycastHit hit;
-    //if (Physics.Raycast(transform.position, lookDirection, out hit)) {
-    if (Physics.Raycast(transform.position + Vector3.up, target.position - transform.position, out hit)) {
-      if (hit.transform == target) {
-        Debug.Log("in LOS");
-        return true;
-      }
-      Debug.Log("raycast hit " + hit.transform.name);
+    if (Physics.Raycast(transform.position + Vector3.up, target.position - transform.position, out hit) && hit.transform == target) {
+      return true;
     }
-    Debug.Log("not in LOS");
     return false;
   }
 
