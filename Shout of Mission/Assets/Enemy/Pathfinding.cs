@@ -37,7 +37,7 @@ public class Pathfinding : MonoBehaviour {
         }
 
         foreach (Node neighbor in grid.GetNeighbors(currentNode)) {
-          if (!neighbor.walkable || closedSet.Contains(neighbor)) {
+          if (!neighbor.walkable && neighbor != targetNode || closedSet.Contains(neighbor)) {
             continue;
           }
 
@@ -67,9 +67,14 @@ public class Pathfinding : MonoBehaviour {
   Vector3[] TracePath(Node start, Node end) {
     List<Node> path = new List<Node>();
     Node current = end;
-    while (current != start) {
-      path.Add(current);
-      current = current.parent;
+    if (start == end) {
+      path.Add(start);
+    }
+    else {
+      while (current != start) {
+        path.Add(current);
+        current = current.parent;
+      }
     }
     Vector3[] waypoints = SimplifyPath(path);
     Array.Reverse(waypoints);

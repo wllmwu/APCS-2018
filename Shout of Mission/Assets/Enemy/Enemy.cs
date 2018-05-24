@@ -10,6 +10,7 @@ public class Enemy : Entity {
   int pathTargetIndex;
   Vector3 lookDirection;
   public bool shouldDrawGizmos;
+  float minDistanceToTarget = 20f;
 
   void Start() {
     Invoke("RequestNewPath", 0.1f);
@@ -22,9 +23,15 @@ public class Enemy : Entity {
   public void OnPathFound(Vector3[] newPath, bool success) {
     if (success) {
       path = newPath;
+      pathTargetIndex = 0;
       StopCoroutine("FollowPath");
       StopCoroutine("FireAtTarget");
-      StartCoroutine("FollowPath");
+      if (path.Length > 0) {
+        StartCoroutine("FollowPath");
+      }
+      else {
+        Invoke("RequestNewPath", 0.1f);
+      }
     }
     else {
       Debug.Log("no path");
@@ -40,11 +47,12 @@ public class Enemy : Entity {
         pathTargetIndex++;
         if (pathTargetIndex >= path.Length) {
           Debug.Log("end of path at index " + pathTargetIndex);
+          Invoke("RequestNewPath", 0.1f);
           yield break;
         }
         nextWaypoint = path[pathTargetIndex];
       }
-      if (targetInLOS && DistanceToTarget() <= 20) {
+      if (targetInLOS && DistanceToTarget() <= minDistanceToTarget) {
         StartCoroutine("FireAtTarget");
         yield break;
       }
@@ -77,8 +85,8 @@ public class Enemy : Entity {
 
   IEnumerator FireAtTarget() {
     while (true) {
-      if (TargetInLineOfSight()) {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDirection), Time.deltaTime * 10);
+      if (TargetInLineOfSight() && DistanceToTarget() <= minDistanceToTarget) {
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDirection), Time.deltaTime * 20);
         Fire();
         yield return new WaitForSeconds(0.1f);
       }
