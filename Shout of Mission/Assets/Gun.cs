@@ -11,10 +11,19 @@ public class Gun : MonoBehaviour {
 	public AudioSource shootSound;
 	public WFX_LightFlicker light;
 	public GameObject impactEffect;
+	private Animation shootAnimation;
+	public bool autoFire;
 
+	void Start(){
+		shootAnimation =  GetComponent<Animation>();
+	}
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire){
+		if (autoFire && Input.GetButton("Fire1") && Time.time >= nextTimeToFire){
+			Shoot();
+			nextTimeToFire = Time.time + 1f/fireRate;
+		}
+		else if (!autoFire && Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire){
 			Shoot();
 			nextTimeToFire = Time.time + 1f/fireRate;
 		}
@@ -24,6 +33,7 @@ public class Gun : MonoBehaviour {
 		muzzleFlash.Play();
 		shootSound.Play();
 		light.beginFlash();
+		shootAnimation.Play();
 		RaycastHit hit;
 
 		if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit)){
