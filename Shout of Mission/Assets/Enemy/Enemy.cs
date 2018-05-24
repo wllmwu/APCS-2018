@@ -10,8 +10,6 @@ public class Enemy : Entity {
   int pathTargetIndex;
   public bool shouldDrawGizmos;
 
-  Vector3 lookDirection;
-
   void Start() {
     Invoke("RequestNewPath", 0.1f);
   }
@@ -55,9 +53,9 @@ public class Enemy : Entity {
   }
 
   bool TargetInLineOfSight() {
-    lookDirection = new Vector3(target.position.x - transform.position.x, 0, target.position.z - transform.position.z);
+    Vector3 lookDirection = new Vector3(target.position.x - transform.position.x, 0, target.position.z - transform.position.z);
     RaycastHit hit;
-    if (Physics.Raycast(transform.position + Vector3.up, target.position - transform.position, out hit) && hit.transform == target) {
+    if (Physics.Raycast(transform.position + Vector3.up, lookDirection, out hit) && hit.transform == target) {
       return true;
     }
     return false;
@@ -79,7 +77,6 @@ public class Enemy : Entity {
 
   public void OnDrawGizmos() {
     Gizmos.color = Color.blue;
-    Gizmos.DrawLine(transform.position + Vector3.up, transform.position + lookDirection + Vector3.up);
     if (shouldDrawGizmos) {
       if (path != null) {
         Gizmos.color = Color.black;
