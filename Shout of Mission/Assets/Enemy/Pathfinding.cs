@@ -23,7 +23,7 @@ public class Pathfinding : MonoBehaviour {
 
     Node startNode = grid.NodeFromWorldPoint(startPosition);
     Node targetNode = grid.NodeFromWorldPoint(targetPosition);
-    if (startNode.walkable && targetNode.walkable) {
+    //if (/*startNode.walkable &&*/ targetNode.walkable) {
       Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
       HashSet<Node> closedSet = new HashSet<Node>();
       openSet.Add(startNode);
@@ -56,7 +56,7 @@ public class Pathfinding : MonoBehaviour {
           }
         }
       }
-    }
+    //}
     yield return null;
     if (success) {
       waypoints = TracePath(startNode, targetNode);
@@ -80,11 +80,11 @@ public class Pathfinding : MonoBehaviour {
     List<Vector3> waypoints = new List<Vector3>();
     Vector2 oldDirection = Vector2.zero;
     for (int i = 1; i < path.Count; i++) {
-      Vector2 newDirection = new Vector2(path[i - 1].gridX - path[i].gridX, path[i - 1].gridY - path[i].gridY);
-      if (newDirection != oldDirection) {
+      //Vector2 newDirection = new Vector2(path[i - 1].gridX - path[i].gridX, path[i - 1].gridY - path[i].gridY);
+      //if (newDirection != oldDirection) {
         waypoints.Add(path[i].worldPosition - Vector3.up * 3);
-      }
-      oldDirection = newDirection;
+      //}
+      //oldDirection = newDirection;
     }
     return waypoints.ToArray();
   }

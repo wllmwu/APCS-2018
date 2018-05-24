@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : Entity {
 
 	public Transform target;
-  float speed = 0.3f;
+  float speed = 0.2f;
   Vector3[] path;
   int pathTargetIndex;
   Vector3 lookDirection;
@@ -23,9 +23,11 @@ public class Enemy : Entity {
     if (success) {
       path = newPath;
       StopCoroutine("FollowPath");
+      StopCoroutine("FireAtTarget");
       StartCoroutine("FollowPath");
     }
     else {
+      Debug.Log("no path");
       Die();
     }
   }
@@ -37,11 +39,13 @@ public class Enemy : Entity {
       if (transform.position == nextWaypoint) {
         pathTargetIndex++;
         if (pathTargetIndex >= path.Length) {
+          Debug.Log("end of path at index " + pathTargetIndex);
           yield break;
         }
         nextWaypoint = path[pathTargetIndex];
       }
       if (targetInLOS && DistanceToTarget() <= 20) {
+        StartCoroutine("FireAtTarget");
         yield break;
       }
       transform.position = Vector3.MoveTowards(transform.position, nextWaypoint, speed);
@@ -68,8 +72,22 @@ public class Enemy : Entity {
 
   float DistanceToTarget() {
     float dist = Vector3.Distance(target.position, transform.position);
-    Debug.Log("distance: " + dist);
     return dist;
+  }
+
+  IEnumerator FireAtTarget() {
+    while (true) {
+      if (TargetInLineOfSight()) {
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDirection), Time.deltaTime * 10);
+        Fire();
+        yield return new WaitForSeconds(0.1f);
+      }
+      else {
+        RequestNewPath();
+        Debug.Log("new path requested");
+        yield break;
+      }
+    }
   }
 
   void Fire() {
@@ -84,6 +102,7 @@ public class Enemy : Entity {
 		if (entity != null){
 			entity.TakeDamage(damage);
 		}*/
+    Debug.Log("fire");
   }
 
   public void OnDrawGizmos() {
