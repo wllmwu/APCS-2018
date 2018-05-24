@@ -9,6 +9,8 @@ public class Gun : MonoBehaviour {
 	public Camera fpsCam;
 	public ParticleSystem muzzleFlash;
 	public AudioSource shootSound;
+	public WFX_LightFlicker light;
+	public GameObject impactEffect;
 
 	// Update is called once per frame
 	void Update () {
@@ -21,7 +23,9 @@ public class Gun : MonoBehaviour {
 	void Shoot(){
 		muzzleFlash.Play();
 		shootSound.Play();
+		light.beginFlash();
 		RaycastHit hit;
+
 		if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit)){
 			Debug.Log(hit.transform.name);
 		}
@@ -31,5 +35,7 @@ public class Gun : MonoBehaviour {
 			entity.TakeDamage(damage);
 		}
 		
+		GameObject temp = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+		Destroy(temp, 1f);
 	}
 }
