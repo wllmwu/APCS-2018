@@ -44215,7 +44215,7 @@ MonoBehaviour:
     m_Bits: 512
   gridWorldSize: {x: 200, y: 200}
   nodeRadius: 1
-  shouldDrawGizmos: 1
+  shouldDrawGizmos: 0
 --- !u!1 &2012178009
 GameObject:
   m_ObjectHideFlags: 0

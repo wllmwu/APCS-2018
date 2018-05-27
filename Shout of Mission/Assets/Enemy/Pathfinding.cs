@@ -23,40 +23,38 @@ public class Pathfinding : MonoBehaviour {
 
     Node startNode = grid.NodeFromWorldPoint(startPosition);
     Node targetNode = grid.NodeFromWorldPoint(targetPosition);
-    //if (/*startNode.walkable &&*/ targetNode.walkable) {
-      Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
-      HashSet<Node> closedSet = new HashSet<Node>();
-      openSet.Add(startNode);
-      while (openSet.Count > 0) {
-        Node currentNode = openSet.RemoveFirst();
-        closedSet.Add(currentNode);
+    Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
+    HashSet<Node> closedSet = new HashSet<Node>();
+    openSet.Add(startNode);
+    while (openSet.Count > 0) {
+      Node currentNode = openSet.RemoveFirst();
+      closedSet.Add(currentNode);
 
-        if (currentNode == targetNode) {
-          success = true;
-          break;
+      if (currentNode == targetNode) {
+        success = true;
+        break;
+      }
+
+      foreach (Node neighbor in grid.GetNeighbors(currentNode)) {
+        if (!neighbor.walkable && neighbor != targetNode || closedSet.Contains(neighbor)) {
+          continue;
         }
 
-        foreach (Node neighbor in grid.GetNeighbors(currentNode)) {
-          if (!neighbor.walkable && neighbor != targetNode || closedSet.Contains(neighbor)) {
-            continue;
+        int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor);
+        if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor)) {
+          neighbor.gCost = newMovementCostToNeighbor;
+          neighbor.hCost = GetDistance(neighbor, targetNode);
+          neighbor.parent = currentNode;
+
+          if (!openSet.Contains(neighbor)) {
+            openSet.Add(neighbor);
           }
-
-          int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor);
-          if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor)) {
-            neighbor.gCost = newMovementCostToNeighbor;
-            neighbor.hCost = GetDistance(neighbor, targetNode);
-            neighbor.parent = currentNode;
-
-            if (!openSet.Contains(neighbor)) {
-              openSet.Add(neighbor);
-            }
-            else {
-              openSet.UpdateItem(neighbor);
-            }
+          else {
+            openSet.UpdateItem(neighbor);
           }
         }
       }
-    //}
+    }
     yield return null;
     if (success) {
       waypoints = TracePath(startNode, targetNode);

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : Entity {
 
 	public Transform target;
-  float speed = 0.2f;
+  float speed = 0.5f;
   Vector3[] path;
   int pathTargetIndex;
   Vector3 lookDirection;
@@ -30,7 +30,7 @@ public class Enemy : Entity {
         StartCoroutine("FollowPath");
       }
       else {
-        Invoke("RequestNewPath", 0.1f);
+        StartCoroutine("FireAtTarget");
       }
     }
     else {
@@ -70,16 +70,19 @@ public class Enemy : Entity {
   }
 
   bool TargetInLineOfSight() {
-    lookDirection = new Vector3(target.position.x - transform.position.x, 0, target.position.z - transform.position.z);
+    //lookDirection = new Vector3(target.position.x - transform.position.x, 0, target.position.z - transform.position.z);
+    lookDirection = target.position - transform.position - Vector3.up * 1.1f;
     RaycastHit hit;
     if (Physics.Raycast(transform.position + Vector3.up, lookDirection, out hit) && hit.transform == target) {
       return true;
     }
+    Debug.Log("not in los -- target " + target.position + " -- transform " + transform.position);
     return false;
   }
 
   float DistanceToTarget() {
-    float dist = Vector3.Distance(target.position, transform.position);
+    float dist = Vector3.Distance(target.position - Vector3.up * target.position.y, transform.position - Vector3.up * transform.position.y);
+    Debug.Log("distance " + dist);
     return dist;
   }
 
@@ -111,6 +114,11 @@ public class Enemy : Entity {
 			entity.TakeDamage(damage);
 		}*/
     Debug.Log("fire");
+  }
+
+  public override void Die() {
+    StopAllCoroutines();
+    Destroy(gameObject);
   }
 
   public void OnDrawGizmos() {
