@@ -37,13 +37,14 @@ public class LevelGenerator : MonoBehaviour {
   private Dictionary<MapModule, MapModule> addWestConnectors;
   private Dictionary<MapModule, MapModule> addNorthConnectors;
   private Dictionary<MapModule, MapModule> addEastConnectors;
+  private bool initialized = false;
 
-  public int rows = 10;
-  public int cols = 10;
+  public static int rows = 10;
+  public static int cols = 10;
   private MapModule[,] map;
   private int spawnRow = 0;
   private int spawnCol = 0;
-  public int moduleSize = 20;
+  public static int moduleSize = 20;
   
   public GameObject spawnRoomPrefab;
   public GameObject[] NSPrefabs;
@@ -60,14 +61,19 @@ public class LevelGenerator : MonoBehaviour {
 
   public GameObject player;
   public bool spawnsPlayer = true;
-  public GameObject enemy;
+  public Enemy originalEnemy;
+  public int numberOfEnemies;
 
-  void Awake () {
-    InitializeModules();
-    SetUpMap();
-    AssembleMap();
-    if (spawnsPlayer) SpawnPlayer();
-    if (spawnsPlayer) SpawnEnemies();
+  public void GenerateLevel () {
+    if (!initialized) {
+      InitializeModules();
+      SetUpMap();
+      AssembleMap();
+      if (spawnsPlayer) SpawnPlayer();
+      if (spawnsPlayer) SpawnEnemies();
+      originalEnemy.isOriginal = true;
+      initialized = true;
+    }
   }
 
   private void InitializeModules () {
@@ -443,6 +449,17 @@ public class LevelGenerator : MonoBehaviour {
   }
 
   private void SpawnEnemies() {
-    enemy.transform.position = new Vector3(spawnCol * moduleSize + 20, 0.1f, (rows - spawnRow - 1) * moduleSize + 20);
+    for (int i = 0; i < numberOfEnemies; i++) {
+      GameObject enemy = (GameObject)Instantiate(originalEnemy.gameObject);
+      PlaceEnemy(enemy);
+    }
+    //enemy.transform.position = new Vector3(spawnCol * moduleSize + 20, 0.1f, (rows - spawnRow - 1) * moduleSize + 20);
   }
+
+  public static void PlaceEnemy(GameObject enemy) {
+    int r = Random.Range(0, rows);
+    int c = Random.Range(0, cols);
+    enemy.transform.position = new Vector3(c * moduleSize, 0.1f, (rows - r - 1) * moduleSize);
+  }
+
 }

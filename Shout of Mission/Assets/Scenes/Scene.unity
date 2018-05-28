@@ -24397,6 +24397,7 @@ MonoBehaviour:
   health: 100
   target: {fileID: 1454034677}
   shouldDrawGizmos: 0
+  isOriginal: 0
 --- !u!65 &995772685
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -34539,6 +34540,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1754440405}
   - component: {fileID: 1754440404}
+  - component: {fileID: 1754440406}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -34557,9 +34559,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf43b7fd6beb145469ab73a7f746dbea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rows: 10
-  cols: 10
-  moduleSize: 20
   spawnRoomPrefab: {fileID: 1646311367713198, guid: adbca941a53114d3798ac3830cea3db4,
     type: 2}
   NSPrefabs:
@@ -34597,7 +34596,8 @@ MonoBehaviour:
   - {fileID: 1378040029802110, guid: 91d4fa9ef98e8424fa19db78aa3b9c94, type: 2}
   player: {fileID: 1454034672}
   spawnsPlayer: 1
-  enemy: {fileID: 995772683}
+  originalEnemy: {fileID: 995772684}
+  numberOfEnemies: 2
 --- !u!4 &1754440405
 Transform:
   m_ObjectHideFlags: 0
@@ -34612,6 +34612,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1754440406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1754440403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6492531ec813e41feaaacb6e363b6877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1754989103
 Prefab:
   m_ObjectHideFlags: 0

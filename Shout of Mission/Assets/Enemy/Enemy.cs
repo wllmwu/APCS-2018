@@ -5,15 +5,19 @@ using UnityEngine;
 public class Enemy : Entity {
 
 	public Transform target;
-  float speed = 0.5f;
+  float speed = 0.2f;
   Vector3[] path;
   int pathTargetIndex;
   Vector3 lookDirection;
   public bool shouldDrawGizmos;
   float minDistanceToTarget = 20f;
 
+  public bool isOriginal;
+
   void Start() {
-    Invoke("RequestNewPath", 0.1f);
+    if (!isOriginal) {
+      Invoke("RequestNewPath", 0.1f);
+    }
   }
 
   void RequestNewPath() {
@@ -22,6 +26,7 @@ public class Enemy : Entity {
 
   public void OnPathFound(Vector3[] newPath, bool success) {
     if (success) {
+      gameObject.SetActive(true);
       path = newPath;
       pathTargetIndex = 0;
       StopCoroutine("FollowPath");
@@ -46,7 +51,7 @@ public class Enemy : Entity {
       if (transform.position == nextWaypoint) {
         pathTargetIndex++;
         if (pathTargetIndex >= path.Length) {
-          Debug.Log("end of path at index " + pathTargetIndex);
+          //Debug.Log("end of path at index " + pathTargetIndex);
           Invoke("RequestNewPath", 0.1f);
           yield break;
         }
@@ -76,13 +81,13 @@ public class Enemy : Entity {
     if (Physics.Raycast(transform.position + Vector3.up, lookDirection, out hit) && hit.transform == target) {
       return true;
     }
-    Debug.Log("not in los -- target " + target.position + " -- transform " + transform.position);
+    //Debug.Log("not in los -- target " + target.position + " -- transform " + transform.position);
     return false;
   }
 
   float DistanceToTarget() {
     float dist = Vector3.Distance(target.position - Vector3.up * target.position.y, transform.position - Vector3.up * transform.position.y);
-    Debug.Log("distance " + dist);
+    //Debug.Log("distance " + dist);
     return dist;
   }
 
@@ -95,7 +100,7 @@ public class Enemy : Entity {
       }
       else {
         RequestNewPath();
-        Debug.Log("new path requested");
+        //Debug.Log("new path requested");
         yield break;
       }
     }
@@ -113,12 +118,19 @@ public class Enemy : Entity {
 		if (entity != null){
 			entity.TakeDamage(damage);
 		}*/
-    Debug.Log("fire");
+    //Debug.Log("fire");
   }
 
   public override void Die() {
     StopAllCoroutines();
-    Destroy(gameObject);
+    gameObject.SetActive(false);
+    Invoke("Respawn", 1);
+  }
+
+  void Respawn() {
+    LevelGenerator.PlaceEnemy(gameObject);
+    health = 100f;
+    RequestNewPath();
   }
 
   public void OnDrawGizmos() {
