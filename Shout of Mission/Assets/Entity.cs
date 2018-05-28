@@ -14,13 +14,7 @@ public class Entity : MonoBehaviour {
 	}
 
 	public virtual void Die(){
-    //StopAllCoroutines();
     Destroy(gameObject);
-		//Invoke("Leave", 0.1f);
 	}
-
-  void Leave() {
-    Destroy(gameObject);
-  }
   
 }

@@ -81,13 +81,12 @@ public class Pathfinding : MonoBehaviour {
 
   Vector3[] SimplifyPath(List<Node> path) {
     List<Vector3> waypoints = new List<Vector3>();
-    Vector2 oldDirection = Vector2.zero;
-    for (int i = 1; i < path.Count; i++) {
-      //Vector2 newDirection = new Vector2(path[i - 1].gridX - path[i].gridX, path[i - 1].gridY - path[i].gridY);
-      //if (newDirection != oldDirection) {
+    for (int i = 1; i < path.Count - 1; i++) {
+      Vector2 newDirectionBack = new Vector2(path[i - 1].gridX - path[i].gridX, path[i - 1].gridY - path[i].gridY);
+      Vector2 newDirectionForward = new Vector2(path[i].gridX - path[i + 1].gridX, path[i].gridY - path[i + 1].gridY);
+      if (newDirectionBack != newDirectionForward) {
         waypoints.Add(path[i].worldPosition - Vector3.up * 3);
-      //}
-      //oldDirection = newDirection;
+      }
     }
     return waypoints.ToArray();
   }

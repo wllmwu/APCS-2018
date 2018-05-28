@@ -11,6 +11,13 @@ public class Enemy : Entity {
   Vector3 lookDirection;
   public bool shouldDrawGizmos;
   float minDistanceToTarget = 20f;
+  public float damage = 2f;
+
+  public GameObject barrelEnd;
+	public ParticleSystem muzzleFlash;
+	public AudioSource shootSound;
+	public WFX_LightFlicker light;
+	public GameObject impactEffect;
 
   public bool isOriginal;
 
@@ -107,18 +114,23 @@ public class Enemy : Entity {
   }
 
   void Fire() {
-    //muzzleFlash.Play();
-    //shootSound.Play();
-    /*RaycastHit hit;
-		if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit)){
+    muzzleFlash.Play();
+		shootSound.Play();
+		light.beginFlash();
+		RaycastHit hit;
+
+		if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward, out hit)){
 			Debug.Log(hit.transform.name);
 		}
 
 		Entity entity = hit.transform.GetComponent<Entity>();
 		if (entity != null){
 			entity.TakeDamage(damage);
-		}*/
-    //Debug.Log("fire");
+      Debug.Log(entity.health);
+		}
+		
+		GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+		Destroy(impact, 1f);
   }
 
   public override void Die() {
