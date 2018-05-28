@@ -5,6 +5,7 @@ public class Gun : MonoBehaviour {
 	public float damage = 10f;
 	public float fireRate = 4f;
 	public float nextTimeToFire = 0f;
+  public float spread = 0.03f;
 
 	public Camera fpsCam;
 	public ParticleSystem muzzleFlash;
@@ -36,7 +37,11 @@ public class Gun : MonoBehaviour {
 		shootAnimation.Play();
 		RaycastHit hit;
 
-		if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit)){
+    float xChange = Random.Range(-spread, spread);
+    float yChange = Random.Range(-spread, spread);
+    float zChange = Random.Range(-spread, spread);
+    Vector3 fireDirection = fpsCam.transform.forward + Vector3.right * xChange + Vector3.up * yChange + Vector3.forward * zChange;
+		if (Physics.Raycast(fpsCam.transform.position, fireDirection, out hit)){
 			Debug.Log(hit.transform.name);
 		}
 

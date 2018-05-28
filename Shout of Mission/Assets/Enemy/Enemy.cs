@@ -12,6 +12,7 @@ public class Enemy : Entity {
   public bool shouldDrawGizmos;
   float minDistanceToTarget = 20f;
   public float damage = 2f;
+  public float spread = 0.05f;
 
   public GameObject barrelEnd;
 	public ParticleSystem muzzleFlash;
@@ -119,7 +120,11 @@ public class Enemy : Entity {
 		light.beginFlash();
 		RaycastHit hit;
 
-		if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward, out hit)){
+    float xChange = Random.Range(-spread, spread);
+    float yChange = Random.Range(-spread, spread);
+    float zChange = Random.Range(-spread, spread);
+    Vector3 fireDirection = transform.forward + Vector3.right * xChange + Vector3.up * yChange + Vector3.forward * zChange;
+		if (Physics.Raycast(transform.position + Vector3.up * 1.5f, fireDirection, out hit)){
 			Debug.Log(hit.transform.name);
 		}
 
