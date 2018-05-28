@@ -13,8 +13,8 @@ public class Entity : MonoBehaviour {
 		}
 	}
 
-	protected void Die(){
-		Destroy(gameObject);
+	public virtual void Die(){
+    Destroy(gameObject);
 	}
   
 }

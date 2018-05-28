@@ -5,14 +5,26 @@ using UnityEngine;
 public class Enemy : Entity {
 
 	public Transform target;
-  float speed = 0.3f;
+  float speed = 0.2f;
   Vector3[] path;
   int pathTargetIndex;
   Vector3 lookDirection;
   public bool shouldDrawGizmos;
+  float minDistanceToTarget = 20f;
+  public float damage = 2f;
+
+  public GameObject barrelEnd;
+	public ParticleSystem muzzleFlash;
+	public AudioSource shootSound;
+	public WFX_LightFlicker light;
+	public GameObject impactEffect;
+
+  public bool isOriginal;
 
   void Start() {
-    Invoke("RequestNewPath", 0.1f);
+    if (!isOriginal) {
+      Invoke("RequestNewPath", 0.1f);
+    }
   }
 
   void RequestNewPath() {
@@ -21,11 +33,20 @@ public class Enemy : Entity {
 
   public void OnPathFound(Vector3[] newPath, bool success) {
     if (success) {
+      gameObject.SetActive(true);
       path = newPath;
+      pathTargetIndex = 0;
       StopCoroutine("FollowPath");
-      StartCoroutine("FollowPath");
+      StopCoroutine("FireAtTarget");
+      if (path.Length > 0) {
+        StartCoroutine("FollowPath");
+      }
+      else {
+        StartCoroutine("FireAtTarget");
+      }
     }
     else {
+      Debug.Log("no path");
       Die();
     }
   }
@@ -37,11 +58,14 @@ public class Enemy : Entity {
       if (transform.position == nextWaypoint) {
         pathTargetIndex++;
         if (pathTargetIndex >= path.Length) {
+          //Debug.Log("end of path at index " + pathTargetIndex);
+          Invoke("RequestNewPath", 0.1f);
           yield break;
         }
         nextWaypoint = path[pathTargetIndex];
       }
-      if (targetInLOS && DistanceToTarget() <= 20) {
+      if (targetInLOS && DistanceToTarget() <= minDistanceToTarget) {
+        StartCoroutine("FireAtTarget");
         yield break;
       }
       transform.position = Vector3.MoveTowards(transform.position, nextWaypoint, speed);
@@ -58,32 +82,67 @@ public class Enemy : Entity {
   }
 
   bool TargetInLineOfSight() {
-    lookDirection = new Vector3(target.position.x - transform.position.x, 0, target.position.z - transform.position.z);
+    //lookDirection = new Vector3(target.position.x - transform.position.x, 0, target.position.z - transform.position.z);
+    lookDirection = target.position - transform.position - Vector3.up * 1.1f;
     RaycastHit hit;
     if (Physics.Raycast(transform.position + Vector3.up, lookDirection, out hit) && hit.transform == target) {
       return true;
     }
+    //Debug.Log("not in los -- target " + target.position + " -- transform " + transform.position);
     return false;
   }
 
   float DistanceToTarget() {
-    float dist = Vector3.Distance(target.position, transform.position);
-    Debug.Log("distance: " + dist);
+    float dist = Vector3.Distance(target.position - Vector3.up * target.position.y, transform.position - Vector3.up * transform.position.y);
+    //Debug.Log("distance " + dist);
     return dist;
   }
 
+  IEnumerator FireAtTarget() {
+    while (true) {
+      if (TargetInLineOfSight() && DistanceToTarget() <= minDistanceToTarget) {
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDirection), Time.deltaTime * 20);
+        Fire();
+        yield return new WaitForSeconds(0.1f);
+      }
+      else {
+        RequestNewPath();
+        //Debug.Log("new path requested");
+        yield break;
+      }
+    }
+  }
+
   void Fire() {
-    //muzzleFlash.Play();
-    //shootSound.Play();
-    /*RaycastHit hit;
-		if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit)){
+    muzzleFlash.Play();
+		shootSound.Play();
+		light.beginFlash();
+		RaycastHit hit;
+
+		if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward, out hit)){
 			Debug.Log(hit.transform.name);
 		}
 
 		Entity entity = hit.transform.GetComponent<Entity>();
 		if (entity != null){
 			entity.TakeDamage(damage);
-		}*/
+      Debug.Log(entity.health);
+		}
+		
+		GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+		Destroy(impact, 1f);
+  }
+
+  public override void Die() {
+    StopAllCoroutines();
+    gameObject.SetActive(false);
+    Invoke("Respawn", 1);
+  }
+
+  void Respawn() {
+    LevelGenerator.PlaceEnemy(gameObject);
+    health = 100f;
+    RequestNewPath();
   }
 
   public void OnDrawGizmos() {

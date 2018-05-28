@@ -23,36 +23,34 @@ public class Pathfinding : MonoBehaviour {
 
     Node startNode = grid.NodeFromWorldPoint(startPosition);
     Node targetNode = grid.NodeFromWorldPoint(targetPosition);
-    if (startNode.walkable && targetNode.walkable) {
-      Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
-      HashSet<Node> closedSet = new HashSet<Node>();
-      openSet.Add(startNode);
-      while (openSet.Count > 0) {
-        Node currentNode = openSet.RemoveFirst();
-        closedSet.Add(currentNode);
+    Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
+    HashSet<Node> closedSet = new HashSet<Node>();
+    openSet.Add(startNode);
+    while (openSet.Count > 0) {
+      Node currentNode = openSet.RemoveFirst();
+      closedSet.Add(currentNode);
 
-        if (currentNode == targetNode) {
-          success = true;
-          break;
+      if (currentNode == targetNode) {
+        success = true;
+        break;
+      }
+
+      foreach (Node neighbor in grid.GetNeighbors(currentNode)) {
+        if (!neighbor.walkable && neighbor != targetNode || closedSet.Contains(neighbor)) {
+          continue;
         }
 
-        foreach (Node neighbor in grid.GetNeighbors(currentNode)) {
-          if (!neighbor.walkable || closedSet.Contains(neighbor)) {
-            continue;
+        int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor);
+        if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor)) {
+          neighbor.gCost = newMovementCostToNeighbor;
+          neighbor.hCost = GetDistance(neighbor, targetNode);
+          neighbor.parent = currentNode;
+
+          if (!openSet.Contains(neighbor)) {
+            openSet.Add(neighbor);
           }
-
-          int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor);
-          if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor)) {
-            neighbor.gCost = newMovementCostToNeighbor;
-            neighbor.hCost = GetDistance(neighbor, targetNode);
-            neighbor.parent = currentNode;
-
-            if (!openSet.Contains(neighbor)) {
-              openSet.Add(neighbor);
-            }
-            else {
-              openSet.UpdateItem(neighbor);
-            }
+          else {
+            openSet.UpdateItem(neighbor);
           }
         }
       }
@@ -67,9 +65,14 @@ public class Pathfinding : MonoBehaviour {
   Vector3[] TracePath(Node start, Node end) {
     List<Node> path = new List<Node>();
     Node current = end;
-    while (current != start) {
-      path.Add(current);
-      current = current.parent;
+    if (start == end) {
+      path.Add(start);
+    }
+    else {
+      while (current != start) {
+        path.Add(current);
+        current = current.parent;
+      }
     }
     Vector3[] waypoints = SimplifyPath(path);
     Array.Reverse(waypoints);
@@ -78,13 +81,12 @@ public class Pathfinding : MonoBehaviour {
 
   Vector3[] SimplifyPath(List<Node> path) {
     List<Vector3> waypoints = new List<Vector3>();
-    Vector2 oldDirection = Vector2.zero;
-    for (int i = 1; i < path.Count; i++) {
-      Vector2 newDirection = new Vector2(path[i - 1].gridX - path[i].gridX, path[i - 1].gridY - path[i].gridY);
-      if (newDirection != oldDirection) {
+    for (int i = 1; i < path.Count - 1; i++) {
+      Vector2 newDirectionBack = new Vector2(path[i - 1].gridX - path[i].gridX, path[i - 1].gridY - path[i].gridY);
+      Vector2 newDirectionForward = new Vector2(path[i].gridX - path[i + 1].gridX, path[i].gridY - path[i + 1].gridY);
+      if (newDirectionBack != newDirectionForward) {
         waypoints.Add(path[i].worldPosition - Vector3.up * 3);
       }
-      oldDirection = newDirection;
     }
     return waypoints.ToArray();
   }
