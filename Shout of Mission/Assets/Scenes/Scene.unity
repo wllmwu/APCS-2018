@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43667564, g: 0.48427147, b: 0.56452364, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667564, g: 0.48427135, b: 0.5645232, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -19537,6 +19537,10 @@ MonoBehaviour:
   damage: 10
   fireRate: 3.3
   nextTimeToFire: 0
+  spread: 0.03
+  clipSize: 10
+  clipBullets: 10
+  remainingBullets: 90
   fpsCam: {fileID: 1754989105}
   muzzleFlash: {fileID: 966445981}
   shootSound: {fileID: 713233154}
@@ -43425,6 +43429,7 @@ MonoBehaviour:
   target: {fileID: 1454034677}
   shouldDrawGizmos: 0
   damage: 2
+  spread: 0.05
   barrelEnd: {fileID: 1559095545}
   muzzleFlash: {fileID: 1343916680}
   shootSound: {fileID: 586300038}
@@ -43619,7 +43624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fpsCam: {fileID: 1754989105}
-  damage: 25
+  damage: 80
   range: 1.5
   impactEffect: {fileID: 100002, guid: 99c73c92ac40473459640b165473206f, type: 2}
 --- !u!82 &1154814522
@@ -48530,9 +48535,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f759adb4fca95de47ba515e12ff6d65f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 15
   fireRate: 10
   nextTimeToFire: 0
+  spread: 0.03
+  clipSize: 30
+  clipBullets: 30
+  remainingBullets: 270
   fpsCam: {fileID: 1754989105}
   muzzleFlash: {fileID: 818504102}
   shootSound: {fileID: 1399420219}
@@ -58293,6 +58302,7 @@ GameObject:
   - component: {fileID: 1693095516}
   - component: {fileID: 1693095515}
   - component: {fileID: 1693095514}
+  - component: {fileID: 1693095518}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -58369,6 +58379,7 @@ RectTransform:
   m_Children:
   - {fileID: 1495614579}
   - {fileID: 1073032772}
+  - {fileID: 1976680619}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -58377,6 +58388,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1693095518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1693095513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c33c2031f355c48a49d688b479ac80bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ammoText: {fileID: 1976680620}
 --- !u!4 &1742391217 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4395125869454004, guid: 03ebf66a72a4f4a45bc20cb1fc2ac803,
@@ -58448,7 +58471,7 @@ MonoBehaviour:
   player: {fileID: 1454034672}
   spawnsPlayer: 1
   originalEnemy: {fileID: 995772684}
-  numberOfEnemies: 2
+  numberOfEnemies: 4
 --- !u!4 &1754440405
 Transform:
   m_ObjectHideFlags: 0
@@ -68078,6 +68101,80 @@ MonoBehaviour:
   gridWorldSize: {x: 200, y: 200}
   nodeRadius: 1
   shouldDrawGizmos: 0
+--- !u!1 &1976680618
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1976680619}
+  - component: {fileID: 1976680621}
+  - component: {fileID: 1976680620}
+  m_Layer: 5
+  m_Name: Ammo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1976680619
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1976680618}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1693095517}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -50, y: 75}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1976680620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1976680618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 27
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 42
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 0 / 0
+--- !u!222 &1976680621
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1976680618}
 --- !u!1 &2012178009
 GameObject:
   m_ObjectHideFlags: 0

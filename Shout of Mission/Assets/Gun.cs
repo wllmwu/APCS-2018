@@ -6,6 +6,9 @@ public class Gun : MonoBehaviour {
 	public float fireRate = 4f;
 	public float nextTimeToFire = 0f;
   public float spread = 0.03f;
+  public int clipSize;
+  public int clipBullets;
+  public int remainingBullets;
 
 	public Camera fpsCam;
 	public ParticleSystem muzzleFlash;
@@ -15,19 +18,25 @@ public class Gun : MonoBehaviour {
 	private Animation shootAnimation;
 	public bool autoFire;
 
+  Hud hud;
+
 	void Start(){
 		shootAnimation =  GetComponent<Animation>();
+    hud = GameObject.Find("Canvas").GetComponent<Hud>();
+    hud.UpdateAmmoText(clipBullets, remainingBullets);
 	}
 	// Update is called once per frame
 	void Update () {
-		if (autoFire && Input.GetButton("Fire1") && Time.time >= nextTimeToFire){
-			Shoot();
-			nextTimeToFire = Time.time + 1f/fireRate;
-		}
-		else if (!autoFire && Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire){
-			Shoot();
-			nextTimeToFire = Time.time + 1f/fireRate;
-		}
+    if (clipBullets > 0) {
+      if (autoFire && Input.GetButton("Fire1") && Time.time >= nextTimeToFire){
+        Shoot();
+        nextTimeToFire = Time.time + 1f/fireRate;
+      }
+      else if (!autoFire && Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire){
+        Shoot();
+        nextTimeToFire = Time.time + 1f/fireRate;
+      }
+    }
 	}
 
 	void Shoot(){
@@ -52,5 +61,20 @@ public class Gun : MonoBehaviour {
 		
 		GameObject temp = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
 		Destroy(temp, 1f);
+
+    clipBullets--;
+    hud.UpdateAmmoText(clipBullets, remainingBullets);
+    if (clipBullets <= 0) {
+      Debug.Log("reload");
+      Invoke("Reload", 3);
+    }
 	}
+
+  void Reload() {
+    while (clipBullets < clipSize && remainingBullets > 0) {
+      clipBullets++;
+      remainingBullets--;
+    }
+    hud.UpdateAmmoText(clipBullets, remainingBullets);
+  }
 }
