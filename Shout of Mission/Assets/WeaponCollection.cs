@@ -35,14 +35,22 @@ public class WeaponCollection : MonoBehaviour {
 
 	void SelectWeapon(){
 				int i = 0;
+    Gun selected = null;
 		foreach(Transform weapon in transform){
 			if (i == selectedWeapon){
 				weapon.gameObject.SetActive(true);
+        selected = (Gun)weapon.gameObject.GetComponent<Gun>();
 			}
 			else{
 				weapon.gameObject.SetActive(false);
 			}
 			i ++;
 		}
+    if (selected != null) {
+      GameObject.Find("Canvas").GetComponent<Hud>().UpdateAmmoText(selected.clipBullets, selected.remainingBullets);
+    }
+    else {
+      GameObject.Find("Canvas").GetComponent<Hud>().ClearAmmoText();
+    }
 	}
 }
