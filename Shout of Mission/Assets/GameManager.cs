@@ -22,7 +22,10 @@ public class GameManager : MonoBehaviour {
       e.Stop();
     }
     foreach (MonoBehaviour s in playerScripts) {
-      s.enabled = false;
+      try {
+        s.enabled = false;
+      }
+      catch {}
     }
     GameObject.Find("Canvas").GetComponent<Hud>().DisplayGameOverScreen();
     Cursor.lockState = CursorLockMode.None;

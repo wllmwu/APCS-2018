@@ -49,7 +49,7 @@ public class Enemy : Entity {
       }
     }
     else {
-      Debug.Log("no path");
+      //Debug.Log("no path");
       Die();
     }
   }
@@ -127,17 +127,15 @@ public class Enemy : Entity {
     float zChange = Random.Range(-spread, spread);
     Vector3 fireDirection = transform.forward + Vector3.right * xChange + Vector3.up * yChange + Vector3.forward * zChange;
 		if (Physics.Raycast(transform.position + Vector3.up * 1.5f, fireDirection, out hit)){
-			Debug.Log(hit.transform.name);
+			//Debug.Log(hit.transform.name);
+      Entity entity = hit.transform.GetComponent<Entity>();
+      if (entity != null){
+        entity.TakeDamage(damage);
+        //Debug.Log(entity.health);
+      }
+      GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+      Destroy(impact, 1f);
 		}
-
-		Entity entity = hit.transform.GetComponent<Entity>();
-		if (entity != null){
-			entity.TakeDamage(damage);
-      Debug.Log(entity.health);
-		}
-		
-		GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-		Destroy(impact, 1f);
   }
 
   public override void TakeDamage(float amount) {

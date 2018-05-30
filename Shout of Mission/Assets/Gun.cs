@@ -57,16 +57,14 @@ public class Gun : MonoBehaviour {
     float zChange = Random.Range(-spread, spread);
     Vector3 fireDirection = fpsCam.transform.forward + Vector3.right * xChange + Vector3.up * yChange + Vector3.forward * zChange;
 		if (Physics.Raycast(fpsCam.transform.position, fireDirection, out hit)){
-			Debug.Log(hit.transform.name);
+			//Debug.Log(hit.transform.name);
+      Entity entity = hit.transform.GetComponent<Entity>();
+      if (entity != null){
+        entity.TakeDamage(damage);
+      }
+      GameObject temp = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+      Destroy(temp, 1f);
 		}
-
-		Entity entity = hit.transform.GetComponent<Entity>();
-		if (entity != null){
-			entity.TakeDamage(damage);
-		}
-		
-		GameObject temp = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-		Destroy(temp, 1f);
 
     clipBullets--;
     hud.UpdateAmmoText(clipBullets, remainingBullets);

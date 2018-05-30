@@ -44,16 +44,15 @@ public class Knife : MonoBehaviour
 
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
-            Debug.Log(hit.transform.name);
-        }
-
-        Entity entity = hit.transform.GetComponent<Entity>();
-        if (entity != null)
-        {
-            entity.TakeDamage(damage);
-            hitSound.Play();
-            GameObject temp = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-            Destroy(temp, 1f);
+            //Debug.Log(hit.transform.name);
+            Entity entity = hit.transform.GetComponent<Entity>();
+            if (entity != null)
+            {
+                entity.TakeDamage(damage);
+                hitSound.Play();
+                GameObject temp = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(temp, 1f);
+            }
         }
     }
 }

@@ -39,7 +39,7 @@ public class Player : Entity {
   }
 
   public override void Die() {
-    Debug.Log("die");
+    //Debug.Log("die");
     GetComponent<CharacterController>().enabled = false;
     GetComponent<FirstPersonController>().enabled = false;
     GameObject.Find("GameManager").GetComponent<GameManager>().EndGame();
