@@ -175,7 +175,7 @@ public class LevelGenerator : MonoBehaviour {
     InitializeMap();
     PickSpawnRoomLocation();
     FixDeadEnds();
-    DisplayMap();
+    //DisplayMap();
   }
 
   private void InitializeMap () {
