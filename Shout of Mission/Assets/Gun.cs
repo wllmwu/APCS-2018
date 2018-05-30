@@ -17,6 +17,7 @@ public class Gun : MonoBehaviour {
 	public GameObject impactEffect;
 	private Animation shootAnimation;
 	public bool autoFire;
+  bool reloading = false;
 
   Hud hud;
 
@@ -27,7 +28,7 @@ public class Gun : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-    if (clipBullets > 0) {
+    if (clipBullets > 0 && !reloading) {
       if (autoFire && Input.GetButton("Fire1") && Time.time >= nextTimeToFire){
         Shoot();
         nextTimeToFire = Time.time + 1f/fireRate;
@@ -36,6 +37,11 @@ public class Gun : MonoBehaviour {
         Shoot();
         nextTimeToFire = Time.time + 1f/fireRate;
       }
+    }
+    if (!reloading && clipBullets < clipSize && Input.GetButtonDown("Fire2")) {
+      reloading = true;
+      hud.SetReloading(true);
+      Invoke("Reload", 2);
     }
 	}
 
@@ -65,8 +71,8 @@ public class Gun : MonoBehaviour {
     clipBullets--;
     hud.UpdateAmmoText(clipBullets, remainingBullets);
     if (clipBullets <= 0) {
-      Debug.Log("reload");
-      Invoke("Reload", 3);
+      hud.SetReloading(true);
+      Invoke("Reload", 2);
     }
 	}
 
@@ -76,5 +82,7 @@ public class Gun : MonoBehaviour {
       remainingBullets--;
     }
     hud.UpdateAmmoText(clipBullets, remainingBullets);
+    hud.SetReloading(false);
+    reloading = false;
   }
 }

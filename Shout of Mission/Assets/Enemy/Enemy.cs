@@ -11,7 +11,7 @@ public class Enemy : Entity {
   Vector3 lookDirection;
   public bool shouldDrawGizmos;
   float minDistanceToTarget = 20f;
-  public float damage = 2f;
+  public float damage = 4f;
   public float spread = 0.05f;
 
   public GameObject barrelEnd;
@@ -21,9 +21,11 @@ public class Enemy : Entity {
 	public GameObject impactEffect;
 
   public bool isOriginal;
+  Player player;
 
   void Start() {
     if (!isOriginal) {
+      player = GameObject.Find("FPSController").GetComponent<Player>();
       Invoke("RequestNewPath", 0.1f);
     }
   }
@@ -138,6 +140,13 @@ public class Enemy : Entity {
 		Destroy(impact, 1f);
   }
 
+  public override void TakeDamage(float amount) {
+    base.TakeDamage(amount);
+    if (health <= 0) {
+      player.IncrementScore();
+    }
+  }
+
   public override void Die() {
     StopAllCoroutines();
     gameObject.SetActive(false);
@@ -148,6 +157,11 @@ public class Enemy : Entity {
     LevelGenerator.PlaceEnemy(gameObject);
     health = 100f;
     RequestNewPath();
+  }
+
+  public void Stop() {
+    enabled = false;
+    StopAllCoroutines();
   }
 
   public void OnDrawGizmos() {
