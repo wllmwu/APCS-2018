@@ -82,9 +82,9 @@ public class Gun : MonoBehaviour {
 	}
 
   void Reload() {
-    if (clipBullets < clipSize && remainingBullets > 0) {
-      clipBullets = clipSize;
-      remainingBullets-= clipSize - clipBullets;
+    while (clipBullets < clipSize && remainingBullets > 0) {
+      clipBullets++;
+      remainingBullets--;
     }
     hud.UpdateAmmoText(clipBullets, remainingBullets);
     hud.SetReloading(false);

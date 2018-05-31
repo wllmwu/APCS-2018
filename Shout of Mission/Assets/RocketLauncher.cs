@@ -49,11 +49,10 @@ public class RocketLauncher : MonoBehaviour {
 	}
 
 	void Reload() {
-    	if (clipRockets < clipSize && remainingRockets > 0) {
-     		 clipRockets = clipSize;
-			int subtract = clipSize - clipRockets;
-     		 remainingRockets -= subtract;
-    	}
+    	while (clipBullets < clipSize && remainingBullets > 0) {
+      clipBullets++;
+      remainingBullets--;
+      }
     	hud.UpdateAmmoText(clipRockets, remainingRockets);
    	 	hud.SetReloading(false);
    		reloading = false;
