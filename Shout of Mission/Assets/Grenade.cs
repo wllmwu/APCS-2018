@@ -14,6 +14,7 @@ public class Grenade : MonoBehaviour {
     public float damage;
     public GameObject impactEffect;
     AudioSource explodeSound;
+    
 
     // Use this for initialization
     void Start()
@@ -26,8 +27,6 @@ public class Grenade : MonoBehaviour {
         explodeSound = GetComponent<AudioSource>();
 
         exploded = false;
-
-
     }
 
     // Update is called once per frame
@@ -47,9 +46,10 @@ public class Grenade : MonoBehaviour {
         {
 
             explode();
-
         }
     }
+
+
 
     void throwing()
     {
