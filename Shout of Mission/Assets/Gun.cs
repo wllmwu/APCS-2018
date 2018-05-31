@@ -15,6 +15,7 @@ public class Gun : MonoBehaviour {
 	public AudioSource shootSound;
 	public WFX_LightFlicker light;
 	public GameObject impactEffect;
+  public GameObject impactEffectBlood;
 	private Animation shootAnimation;
 	public bool autoFire;
   bool reloading = false;
@@ -38,10 +39,10 @@ public class Gun : MonoBehaviour {
         nextTimeToFire = Time.time + 1f/fireRate;
       }
     }
-    if (!reloading && clipBullets < clipSize && Input.GetButtonDown("Fire2")) {
+    if (!reloading && clipBullets < clipSize && Input.GetButtonDown("Fire2") && remainingBullets > 0) {
       reloading = true;
       hud.SetReloading(true);
-      Invoke("Reload", 2);
+      Invoke("Reload", 1);
     }
 	}
 
@@ -62,22 +63,28 @@ public class Gun : MonoBehaviour {
       if (entity != null){
         entity.TakeDamage(damage);
       }
-      GameObject temp = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-      Destroy(temp, 1f);
+		  if (hit.transform.tag == "Enemy"){
+		  	GameObject temp = Instantiate(impactEffectBlood, hit.point, Quaternion.LookRotation(hit.normal));
+		  	Destroy(temp, 1f);
+		  }
+	  	else{
+		  	GameObject temp = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+		  	Destroy(temp, 1f);
+		  }
 		}
 
     clipBullets--;
     hud.UpdateAmmoText(clipBullets, remainingBullets);
-    if (clipBullets <= 0) {
+    if (clipBullets <= 0 && remainingBullets > 0) {
       hud.SetReloading(true);
-      Invoke("Reload", 2);
+      Invoke("Reload", 1);
     }
 	}
 
   void Reload() {
-    while (clipBullets < clipSize && remainingBullets > 0) {
-      clipBullets++;
-      remainingBullets--;
+    if (clipBullets < clipSize && remainingBullets > 0) {
+      clipBullets = clipSize;
+      remainingBullets-= clipSize - clipBullets;
     }
     hud.UpdateAmmoText(clipBullets, remainingBullets);
     hud.SetReloading(false);
